@@ -1,5 +1,6 @@
+'use client'
+
 import * as React from 'react';
-import type { Metadata } from 'next';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
@@ -10,8 +11,8 @@ import {Plus as PlusIcon} from "@phosphor-icons/react/dist/ssr/Plus";
 import {PaymentsTable} from "@/components/dashboard/settings/payments-table";
 import dayjs from "dayjs";
 import type {Payment} from "@/components/dashboard/settings/payments-table";
-
-export const metadata = { title: `Pagos | Dashboard ` } satisfies Metadata;
+import FormModal from "@/components/forms/Utils/FormModal";
+import {PaymentsForm} from "@/components/forms/Payments/CreatePayments";
 
 const payments = [
   {
@@ -43,6 +44,10 @@ export default function Page(): React.JSX.Element {
 
   const paginatedPayments = applyPagination(payments, page, rowsPerPage);
 
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => { setOpen(true); };
+  const handleClose = () => { setOpen(false); };
+
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={3}>
@@ -58,16 +63,22 @@ export default function Page(): React.JSX.Element {
           </Stack>
         </Stack>
         <div>
-          <Button startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
+          <Button startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />} variant="contained" onClick={handleOpen}>
             Add
           </Button>
         </div>
       </Stack>
+
       <PaymentsTable
         count={paginatedPayments.length}
         page={page}
         rows={paginatedPayments}
         rowsPerPage={rowsPerPage}
+      />
+
+      <FormModal form={<PaymentsForm/>}
+                 open={open}
+                 handleClose={handleClose}
       />
     </Stack>
   );

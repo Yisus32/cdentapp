@@ -8,5 +8,10 @@ export const paths = {
     integrations: '/dashboard/integrations',
     settings: '/dashboard/settings',
   },
+  create: {
+    appointment: '/create/appointment',
+    customer: '/create/customer',
+    payment: '/create/payment',
+  },
   errors: { notFound: '/errors/not-found' },
 } as const;

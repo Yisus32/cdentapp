@@ -1,5 +1,6 @@
+'use client';
+
 import * as React from 'react';
-import type { Metadata } from 'next';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -11,8 +12,9 @@ import dayjs from 'dayjs';
 import { CustomersFilters } from '@/components/dashboard/customer/customers-filters';
 import { CustomersTable } from '@/components/dashboard/customer/customers-table';
 import type { Customer } from '@/components/dashboard/customer/customers-table';
+import {CreateUser} from "@/components/forms/Users/CreateUsers";
+import FormModal from "@/components/forms/Utils/FormModal";
 
-export const metadata = { title: `Usuarios | Dashboard` } satisfies Metadata;
 
 const customers = [
   {
@@ -53,33 +55,51 @@ export default function Page(): React.JSX.Element {
 
   const paginatedCustomers = applyPagination(customers, page, rowsPerPage);
 
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => { setOpen(true); };
+  const handleClose = () => { setOpen(false); };
+
+
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={3}>
-        <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
+        <Stack spacing={1} sx={{flex: '1 1 auto'}}>
           <Typography variant="h4">Customers</Typography>
-          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-            <Button color="inherit" startIcon={<UploadIcon fontSize="var(--icon-fontSize-md)" />}>
+          <Stack direction="row" spacing={1} sx={{alignItems: 'center'}}>
+            <Button color="inherit" startIcon={<UploadIcon fontSize="var(--icon-fontSize-md)"/>}>
               Import
             </Button>
-            <Button color="inherit" startIcon={<DownloadIcon fontSize="var(--icon-fontSize-md)" />}>
+            <Button color="inherit" startIcon={<DownloadIcon fontSize="var(--icon-fontSize-md)"/>}>
               Export
             </Button>
           </Stack>
         </Stack>
         <div>
-          <Button startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
+          <Button startIcon={<PlusIcon
+            fontSize="var(--icon-fontSize-md)"/>}
+                  variant="contained"
+                  onClick={handleOpen}
+          >
             Add
           </Button>
         </div>
       </Stack>
-      <CustomersFilters />
+
+      <CustomersFilters/>
+
       <CustomersTable
         count={paginatedCustomers.length}
         page={page}
         rows={paginatedCustomers}
         rowsPerPage={rowsPerPage}
       />
+
+
+        <FormModal form={<CreateUser/>}
+                   open={open}
+                   handleClose={handleClose}
+        />
+
     </Stack>
   );
 }
