@@ -13,11 +13,17 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import Grid from '@mui/material/Grid';
 
 import { useSelection } from '@/hooks/use-selection';
 import IconButton from "@mui/material/IconButton";
 import {Trash} from "@phosphor-icons/react/dist/ssr/Trash";
 import {Pencil} from "@phosphor-icons/react/dist/ssr/Pencil";
+import {Eye} from "@phosphor-icons/react/dist/ssr/Eye";
+import FormModal from "@/components/forms/Utils/FormModal";
+import {EditUser} from "@/components/forms/Users/EditUser";
+import Page from "@/app/dashboard/account/page";
+import ClinicHistory from "@/components/dashboard/customer/ClinicHistory";
 
 function noop(): void {
   // do nothing
@@ -53,6 +59,22 @@ export function CustomersTable({
   }, [rows]);
 
   const { selected } = useSelection(rowIds);
+
+  const [open, setOpen] = React.useState(false);
+  const [viewOpen, setViewOpen] = React.useState(false);
+  const [dataToEdit, setDataToEdit] = React.useState<Customer | null>(null);
+  const handleOpen = (data: Customer) => {
+    setOpen(true)
+    setDataToEdit(data)
+  };
+
+  const handleViewOpen = (data: Customer) => {
+    setViewOpen(true)
+    setDataToEdit(data)
+  }
+  const handleClose = () => { setOpen(false); };
+  const handleViewClose = () => { setViewOpen(false); };
+
 
   return (
     <Card>
@@ -98,13 +120,29 @@ export function CustomersTable({
                   </TableCell>
                   <TableCell>{dayjs(row.createdAt).format('MMM D, YYYY')}</TableCell>
                   <TableCell>
-                    <IconButton edge="start">
-                      <Trash weight="bold" />
-                    </IconButton>
+                    <Grid container spacing={1}>
+                      <Grid item xs={4}>
+                        <IconButton onClick={ () => {
+                          handleViewOpen(row)
+                        }} >
+                          <Eye weight="bold" />
+                        </IconButton>
+                      </Grid>
 
-                    <IconButton edge="end">
-                      <Pencil weight="bold" />
-                    </IconButton>
+                      <Grid item xs={4}>
+                        <IconButton onClick={ () => {
+                          handleOpen(row)
+                        }} >
+                          <Pencil weight="bold" />
+                        </IconButton>
+                      </Grid>
+
+                      <Grid item xs={4}>
+                        <IconButton>
+                          <Trash weight="bold" />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
                   </TableCell>
                 </TableRow>
               );
@@ -121,6 +159,16 @@ export function CustomersTable({
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
+      />
+
+      <FormModal form={<EditUser data={dataToEdit}/>}
+                 open={open}
+                 handleClose={handleClose}
+      />
+
+      <FormModal form={<ClinicHistory/>}
+                 open={viewOpen}
+                 handleClose={handleViewClose}
       />
     </Card>
   );

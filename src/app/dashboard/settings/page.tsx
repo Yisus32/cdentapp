@@ -9,32 +9,37 @@ import {Upload as UploadIcon} from "@phosphor-icons/react/dist/ssr/Upload";
 import {Download as DownloadIcon} from "@phosphor-icons/react/dist/ssr/Download";
 import {Plus as PlusIcon} from "@phosphor-icons/react/dist/ssr/Plus";
 import {PaymentsTable} from "@/components/dashboard/settings/payments-table";
-import dayjs from "dayjs";
 import type {Payment} from "@/components/dashboard/settings/payments-table";
 import FormModal from "@/components/forms/Utils/FormModal";
 import {PaymentsForm} from "@/components/forms/Payments/CreatePayments";
+
+const formatDate = (value) => {
+
+  const date = new Date();
+  return date.toISOString().split('T')[0];
+}
 
 const payments = [
   {
     id: 'USR-010',
     refCode: '0123847262',
-    type: 'Transf. Bancaria',
-    amount: '$20.00 USD',
-    createdAt: dayjs().subtract(2, 'hours').toDate(),
+    type: 'transaction',
+    amount: 20.00,
+    createdAt: formatDate('2021-09-01'),
   },
   {
     id: 'USR-010',
     refCode: '0128926345',
-    type: 'Efectivo',
-    amount: '$20.00 USD',
-    createdAt: dayjs().subtract(2, 'hours').toDate(),
+    type: 'cash',
+    amount: 20.00,
+    createdAt: formatDate('2021-09-01'),
   },
   {
     id: 'USR-010',
     refCode: '0123847262',
-    type: 'Transf. Bancaria',
-    amount: '$15.00 USD',
-    createdAt: dayjs().subtract(2, 'hours').toDate(),
+    type: 'transaction',
+    amount: 15.00,
+    createdAt: formatDate('2021-09-01'),
   },
 ] satisfies Payment[];
 

@@ -6,7 +6,7 @@
 
 > Free React Admin Dashboard made with [MUI's](https://mui.com) components, [React](https://reactjs.org) and of course [Next.js](https://github.com/vercel/next.js) to boost your app development process!
 
-## Pages 
+## Pages
 
 - [Dashboard](https://material-kit-react.devias.io)
 - [Customers](https://material-kit-react.devias.io/dashboard/customers)
@@ -68,7 +68,7 @@ Within the download you'll find the following directories and files:
 	├── types
 	└── app
 		├── layout.tsx
-		├── page.tsx
+		├── Page.tsx
 		├── auth
 		└── dashboard
 ```

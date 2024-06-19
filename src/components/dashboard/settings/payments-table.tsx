@@ -17,16 +17,29 @@ import { useSelection } from '@/hooks/use-selection';
 import { Trash } from "@phosphor-icons/react/dist/ssr/Trash";
 import { Pencil } from "@phosphor-icons/react/dist/ssr/Pencil";
 import IconButton from "@mui/material/IconButton";
+import Grid from "@mui/material/Grid";
+import {Eye} from "@phosphor-icons/react/dist/ssr/Eye";
+import {Customer} from "@/components/dashboard/customer/customers-table";
+import FormModal from "@/components/forms/Utils/FormModal";
+import {EditPayment} from "@/components/forms/Payments/EditPayment";
+import {Appointment} from "@/components/dashboard/integrations/appointments-table";
+import {EditAppoitments} from "@/components/forms/Appoitment/EditAppoitments";
 
 function noop(): void {
   // do nothing
+}
+
+const formatDate = (value) => {
+
+  const date = new Date();
+  return date.toISOString().split('T')[0];
 }
 
 export interface Payment {
   id: string;
   refCode: string;
   type: string;
-  amount: string;
+  amount: number;
   createdAt: Date;
 }
 
@@ -48,6 +61,23 @@ export function PaymentsTable({
   }, [rows]);
 
   const { selected } = useSelection(rowIds);
+
+  const [open, setOpen] = React.useState(false);
+  const [viewOpen, setViewOpen] = React.useState(false);
+  const [dataToEdit, setDataToEdit] = React.useState<Customer | null>(null);
+
+  const handleOpen = (data: Payment) => {
+    setOpen(true)
+    setDataToEdit(data)
+  };
+
+  const handleViewOpen = (data: Payment) => {
+    setViewOpen(true)
+    setDataToEdit(data)
+  }
+
+  const handleClose = () => { setOpen(false); };
+  const handleViewClose = () => { setViewOpen(false); };
 
   return (
     <Card>
@@ -75,7 +105,9 @@ export function PaymentsTable({
                   </TableCell>
                   <TableCell>
                     <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                      <Typography variant="subtitle2">{row.type}</Typography>
+                      <Typography variant="subtitle2">{
+                        row.type === 'transaction' ? 'Transferencia' : 'Efectivo'
+                      }</Typography>
                     </Stack>
                   </TableCell>
                   <TableCell>
@@ -87,13 +119,29 @@ export function PaymentsTable({
                     {dayjs(row.createdAt).format('MMM D, YYYY')}
                   </TableCell>
                   <TableCell>
-                    <IconButton edge="start">
-                      <Trash weight="bold" />
-                    </IconButton>
+                    <Grid container spacing={1}>
+                      <Grid item xs={4}>
+                        <IconButton onClick={() => {
+                          handleViewOpen(row)
+                        }}>
+                          <Eye weight="bold" />
+                        </IconButton>
+                      </Grid>
 
-                    <IconButton edge="end">
-                      <Pencil weight="bold" />
-                    </IconButton>
+                      <Grid item xs={4}>
+                        <IconButton onClick={() => {
+                          handleOpen(row)
+                        }}>
+                          <Pencil weight="bold" />
+                        </IconButton>
+                      </Grid>
+
+                      <Grid item xs={4}>
+                        <IconButton>
+                          <Trash weight="bold" />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
                   </TableCell>
                 </TableRow>
               );
@@ -111,6 +159,17 @@ export function PaymentsTable({
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
+      <FormModal form={<EditPayment data={dataToEdit}/>}
+                 open={open}
+                 handleClose={handleClose}
+      />
+
+      <FormModal form={<EditPayment data={dataToEdit}/>}
+                 open={viewOpen}
+                 handleClose={handleViewClose}
+      />
+
+
     </Card>
   );
 }

@@ -4,21 +4,26 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Download as DownloadIcon } from '@phosphor-icons/react/dist/ssr/Download';
-import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
-import { Upload as UploadIcon } from '@phosphor-icons/react/dist/ssr/Upload';
+import {Download as DownloadIcon} from '@phosphor-icons/react/dist/ssr/Download';
+import {Plus as PlusIcon} from '@phosphor-icons/react/dist/ssr/Plus';
+import {Upload as UploadIcon} from '@phosphor-icons/react/dist/ssr/Upload';
 import dayjs from 'dayjs';
 
-import type { Appointment} from "@/components/dashboard/integrations/appointments-table";
+import type {Appointment} from "@/components/dashboard/integrations/appointments-table";
 import {AppointmentsTable} from "@/components/dashboard/integrations/appointments-table";
 import FormModal from "@/components/forms/Utils/FormModal";
 import {AppoitmentForm} from "@/components/forms/Appoitment/CreateAppoitments";
 
+const formatDate = (value) => {
+
+  const date = new Date();
+  return date.toISOString().split('T')[0];
+}
 
 const appointments = [
   {
     id: 'AP-001',
-    date: '2021-09-15T08:00:00.000Z',
+    date: formatDate('2021-09-01'),
     patient: 'Alcides Antonio Gonzalez',
     type: 'Consulta',
     status: 'Pendiente',

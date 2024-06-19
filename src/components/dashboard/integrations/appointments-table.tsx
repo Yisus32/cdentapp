@@ -18,6 +18,12 @@ import { useSelection } from '@/hooks/use-selection';
 import IconButton from "@mui/material/IconButton";
 import {Trash} from "@phosphor-icons/react/dist/ssr/Trash";
 import {Pencil} from "@phosphor-icons/react/dist/ssr/Pencil";
+import Grid from "@mui/material/Grid";
+import {Eye} from "@phosphor-icons/react/dist/ssr/Eye";
+import {Customer} from "@/components/dashboard/customer/customers-table";
+import {EditUser} from "@/components/forms/Users/EditUser";
+import FormModal from "@/components/forms/Utils/FormModal";
+import {EditAppoitments} from "@/components/forms/Appoitment/EditAppoitments";
 
 function noop(): void {
   // do nothing
@@ -51,6 +57,21 @@ export function AppointmentsTable({
   }, [rows]);
 
   const { selected } = useSelection(rowIds);
+  const [open, setOpen] = React.useState(false);
+  const [viewOpen, setViewOpen] = React.useState(false);
+  const [dataToEdit, setDataToEdit] = React.useState<Customer | null>(null);
+  const handleOpen = (data: Appointment) => {
+    setOpen(true)
+    setDataToEdit(data)
+  };
+
+  const handleViewOpen = (data: Appointment) => {
+    setViewOpen(true)
+    setDataToEdit(data)
+  }
+
+  const handleClose = () => { setOpen(false); };
+  const handleViewClose = () => { setViewOpen(false); };
 
   return (
     <Card>
@@ -92,13 +113,29 @@ export function AppointmentsTable({
                   <TableCell>{row.status}</TableCell>
                   <TableCell>{dayjs(row.createdAt).format('MMM D, YYYY')}</TableCell>
                   <TableCell>
-                    <IconButton edge="start">
-                      <Trash weight="bold" />
-                    </IconButton>
+                    <Grid container spacing={1}>
+                      <Grid item xs={4}>
+                        <IconButton onClick={() => {
+                          handleViewOpen(row)
+                        }}>
+                          <Eye weight="bold" />
+                        </IconButton>
+                      </Grid>
 
-                    <IconButton edge="end">
-                      <Pencil weight="bold" />
-                    </IconButton>
+                      <Grid item xs={4}>
+                        <IconButton onClick={ () => {
+                          handleOpen(row)
+                        }}>
+                          <Pencil weight="bold" />
+                        </IconButton>
+                      </Grid>
+
+                      <Grid item xs={4}>
+                        <IconButton>
+                          <Trash weight="bold" />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
                   </TableCell>
                 </TableRow>
               );
@@ -115,6 +152,15 @@ export function AppointmentsTable({
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
+      />
+      <FormModal form={<EditAppoitments data={dataToEdit}/>}
+                 open={open}
+                 handleClose={handleClose}
+      />
+
+      <FormModal form={<EditAppoitments data={dataToEdit}/>}
+                 open={viewOpen}
+                 handleClose={handleViewClose}
       />
     </Card>
   );

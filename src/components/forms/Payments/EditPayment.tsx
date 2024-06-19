@@ -6,15 +6,15 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import {FormInputs} from "@/components/forms/Payments/FormInputs";
 
-export function PaymentsForm(): React.JSX.Element {
+export function EditPayment(props): React.JSX.Element {
   return (
 
     <Stack spacing={3} sx={{ maxWidth: 'sm' }}>
-      <FormInputs />
+      <FormInputs data={props.data}/>
 
       <Divider />
 
-      <Button variant="contained">Crear</Button>
+      <Button variant="contained">Editar</Button>
     </Stack>
   );
 }
