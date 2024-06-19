@@ -21,9 +21,10 @@ import {Pencil} from "@phosphor-icons/react/dist/ssr/Pencil";
 import Grid from "@mui/material/Grid";
 import {Eye} from "@phosphor-icons/react/dist/ssr/Eye";
 import {Customer} from "@/components/dashboard/customer/customers-table";
-import {EditUser} from "@/components/forms/Users/EditUser";
 import FormModal from "@/components/forms/Utils/FormModal";
 import {EditAppoitments} from "@/components/forms/Appoitment/EditAppoitments";
+import ViewAppoitments from "@/components/dashboard/integrations/ViewAppoitments";
+
 
 function noop(): void {
   // do nothing
@@ -158,7 +159,7 @@ export function AppointmentsTable({
                  handleClose={handleClose}
       />
 
-      <FormModal form={<EditAppoitments data={dataToEdit}/>}
+      <FormModal form={<ViewAppoitments/>}
                  open={viewOpen}
                  handleClose={handleViewClose}
       />
