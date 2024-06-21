@@ -159,7 +159,7 @@ export function AppointmentsTable({
                  handleClose={handleClose}
       />
 
-      <FormModal form={<ViewAppoitments/>}
+      <FormModal form={<ViewAppoitments data={dataToEdit}/>}
                  open={viewOpen}
                  handleClose={handleViewClose}
       />
