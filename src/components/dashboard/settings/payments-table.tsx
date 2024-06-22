@@ -24,6 +24,7 @@ import FormModal from "@/components/forms/Utils/FormModal";
 import {EditPayment} from "@/components/forms/Payments/EditPayment";
 import {Appointment} from "@/components/dashboard/integrations/appointments-table";
 import {EditAppoitments} from "@/components/forms/Appoitment/EditAppoitments";
+import ViewPayments from "@/components/dashboard/settings/ViewPayments";
 
 function noop(): void {
   // do nothing
@@ -106,8 +107,8 @@ export function PaymentsTable({
                   <TableCell>
                     <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
                       <Typography variant="subtitle2">{
-                        row.type === 'transaction' ? 'Transferencia' : 'Efectivo'
-                      }</Typography>
+                        row.type === 'transferencia' ? 'Transferencia' : 'Efectivo '
+                          }</Typography>
                     </Stack>
                   </TableCell>
                   <TableCell>
@@ -164,7 +165,7 @@ export function PaymentsTable({
                  handleClose={handleClose}
       />
 
-      <FormModal form={<EditPayment data={dataToEdit}/>}
+      <FormModal form={<ViewPayments data={dataToEdit}/>}
                  open={viewOpen}
                  handleClose={handleViewClose}
       />

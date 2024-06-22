@@ -9,7 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 const states = [
   { value: 'transaction', label: 'Transferencia' },
-  { value: 'cash', label: 'Efectivo' },
+  { value: 'efectivo', label: 'Efectivo' },
 ] as const;
 
 export function FormInputs(props): React.JSX.Element {
@@ -43,8 +43,8 @@ export function FormInputs(props): React.JSX.Element {
 
       <FormControl fullWidth>
         <InputLabel>Codigo</InputLabel>
-        <OutlinedInput label="amount"
-                       name="amount"
+        <OutlinedInput label="refcode"
+                       name="refcode"
                        type="number"
                        value={refCode}
                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
