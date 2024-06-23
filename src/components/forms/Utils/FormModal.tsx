@@ -4,7 +4,7 @@ import { styled, css } from '@mui/system';
 import { Modal as BaseModal } from '@mui/base/Modal';
 
 export default function FormModal(props: any): React.JSX.Element {
-  const { form, open, handleClose } = props;
+  const { form, open, handleClose, width } = props;
 
   return (
 
@@ -15,7 +15,7 @@ export default function FormModal(props: any): React.JSX.Element {
         onClose={handleClose}
         slots={{ backdrop: StyledBackdrop }}
       >
-        <ModalContent sx={{ width: 600 }}>
+        <ModalContent sx={{ width: width ?? 600 }}>
           {form}
         </ModalContent>
       </Modal>

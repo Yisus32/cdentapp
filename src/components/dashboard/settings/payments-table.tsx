@@ -22,8 +22,6 @@ import {Eye} from "@phosphor-icons/react/dist/ssr/Eye";
 import {Customer} from "@/components/dashboard/customer/customers-table";
 import FormModal from "@/components/forms/Utils/FormModal";
 import {EditPayment} from "@/components/forms/Payments/EditPayment";
-import {Appointment} from "@/components/dashboard/integrations/appointments-table";
-import {EditAppoitments} from "@/components/forms/Appoitment/EditAppoitments";
 import ViewPayments from "@/components/dashboard/settings/ViewPayments";
 
 function noop(): void {
