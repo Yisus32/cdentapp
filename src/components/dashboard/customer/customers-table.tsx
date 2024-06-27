@@ -24,6 +24,7 @@ import FormModal from "@/components/forms/Utils/FormModal";
 import {EditUser} from "@/components/forms/Users/EditUser";
 import Page from "@/app/dashboard/account/page";
 import ClinicHistory from "@/components/dashboard/customer/ClinicHistory";
+import internal from "stream";
 
 function noop(): void {
   // do nothing
@@ -35,7 +36,7 @@ export interface Customer {
   lastname: string;
   email: string;
   dni: string;
-
+  role_id: number;
   address: { city: string; state: string; country: string; street: string };
   phone: string;
   createdAt: Date;
@@ -85,6 +86,7 @@ export function CustomersTable({
               <TableCell>Nombre</TableCell>
               <TableCell>Apellido</TableCell>
               <TableCell>Cédula</TableCell>
+              <TableCell>Rol</TableCell>
               <TableCell>Telefono</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Dirección</TableCell>
@@ -113,11 +115,16 @@ export function CustomersTable({
                       <Typography variant="subtitle2">{row.dni}</Typography>
                     </Stack>
                   </TableCell>
+
+                  <TableCell>
+                    <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
+                      <Typography variant="subtitle2">{row.role_id}</Typography>
+                    </Stack>
+                  </TableCell>
+
                   <TableCell>{row.phone}</TableCell>
                   <TableCell>{row.email}</TableCell>
-                  <TableCell>
-                    {row.address.city}, {row.address.state}, {row.address.country}
-                  </TableCell>
+                  <TableCell>{row.address}</TableCell>
                   <TableCell>{dayjs(row.createdAt).format('MMM D, YYYY')}</TableCell>
                   <TableCell>
                     <Grid container spacing={1}>
@@ -161,15 +168,16 @@ export function CustomersTable({
         rowsPerPageOptions={[5, 10, 25]}
       />
 
-      <FormModal form={<EditUser data={dataToEdit}/>}
+      <FormModal form={<EditUser data={dataToEdit} setOpen={setOpen} />}
                  open={open}
                  handleClose={handleClose}
       />
 
-      <FormModal form={<ClinicHistory/>}
+      <FormModal form={<ClinicHistory userId={dataToEdit?.id} setOpen={setOpen}/>}
                  open={viewOpen}
                  handleClose={handleViewClose}
       />
+
     </Card>
   );
 }

@@ -74,6 +74,12 @@ export function AppointmentsTable({
   const handleClose = () => { setOpen(false); };
   const handleViewClose = () => { setViewOpen(false); };
 
+  const formatDateToDisplay = (date: string) => {
+    const summonDate = new Date(date);
+
+    return summonDate.toLocaleDateString('en-UK', { year: 'numeric', month: 'numeric', day: 'numeric' });
+  }
+
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
@@ -97,7 +103,7 @@ export function AppointmentsTable({
                 <TableRow hover key={row.id} selected={isSelected}>
                   <TableCell>
                     <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                      <Typography variant="subtitle2">{row.date}</Typography>
+                      <Typography variant="subtitle2">{formatDateToDisplay(row.date)}</Typography>
                     </Stack>
                   </TableCell>
                   <TableCell>
@@ -154,7 +160,7 @@ export function AppointmentsTable({
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
-      <FormModal form={<EditAppoitments data={dataToEdit}/>}
+      <FormModal form={<EditAppoitments data={dataToEdit} setOpen={setOpen}/>}
                  open={open}
                  handleClose={handleClose}
       />

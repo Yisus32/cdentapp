@@ -12,35 +12,29 @@ import dayjs from 'dayjs';
 import type {Appointment} from "@/components/dashboard/integrations/appointments-table";
 import {AppointmentsTable} from "@/components/dashboard/integrations/appointments-table";
 import FormModal from "@/components/forms/Utils/FormModal";
-import {AppoitmentForm} from "@/components/forms/Appoitment/CreateAppoitments";
+import {AppointmentForm} from "@/components/forms/Appoitment/CreateAppoitments";
+import {useEffect} from "react";
+import {getAppointments} from "@/services/AppointmentServices";
 
-const formatDate = (value) => {
-
-  const date = new Date();
-  return date.toISOString().split('T')[0];
-}
-
-const appointments = [
-  {
-    id: 'AP-001',
-    date: formatDate('2021-09-01'),
-    patient: 'Alcides Antonio Gonzalez',
-    type: 'Consulta',
-    status: 'Pendiente',
-    medicalProfessional: 'Dr. Marcus Finn',
-    createdAt: dayjs().subtract(2, 'hours').toDate(),
-  }
-] satisfies Appointment[];
 
 export default function Page(): React.JSX.Element {
   const page = 0;
   const rowsPerPage = 5;
 
-  const paginatedAppointment = applyPagination(appointments, page, rowsPerPage);
 
   const [open, setOpen] = React.useState(false);
+
+   const [appointments, setAppointments] = React.useState<Appointment[]>([]);
   const handleOpen = () => { setOpen(true); };
   const handleClose = () => { setOpen(false); };
+
+  useEffect (() => {
+    getAppointments().then((data) => {
+      setAppointments(data['appointments']);
+    });
+  }, []);
+
+ const paginatedAppointment = applyPagination(appointments, page, rowsPerPage);
 
   return (
     <Stack spacing={3}>
@@ -70,7 +64,7 @@ export default function Page(): React.JSX.Element {
         rowsPerPage={rowsPerPage}
       />
 
-      <FormModal form={<AppoitmentForm/>}
+      <FormModal form={<AppointmentForm setOpen={setOpen}/>}
                  open={open}
                  handleClose={handleClose}
       />

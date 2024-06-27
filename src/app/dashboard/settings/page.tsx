@@ -12,46 +12,31 @@ import {PaymentsTable} from "@/components/dashboard/settings/payments-table";
 import type {Payment} from "@/components/dashboard/settings/payments-table";
 import FormModal from "@/components/forms/Utils/FormModal";
 import {PaymentsForm} from "@/components/forms/Payments/CreatePayments";
+import {useEffect} from "react";
+import getPayments from "@/services/PaymentServices";
 
-const formatDate = (value) => {
-
-  const date = new Date();
-  return date.toISOString().split('T')[0];
-}
-
-const payments = [
-  {
-    id: 'USR-010',
-    refCode: '0123847262',
-    type: 'transaction',
-    amount: 20.00,
-    createdAt: formatDate('2021-09-01'),
-  },
-  {
-    id: 'USR-010',
-    refCode: '0128926345',
-    type: 'cash',
-    amount: 20.00,
-    createdAt: formatDate('2021-09-01'),
-  },
-  {
-    id: 'USR-010',
-    refCode: '0123847262',
-    type: 'transaction',
-    amount: 15.00,
-    createdAt: formatDate('2021-09-01'),
-  },
-] satisfies Payment[];
 
 export default function Page(): React.JSX.Element {
   const page = 0;
   const rowsPerPage = 5;
 
-  const paginatedPayments = applyPagination(payments, page, rowsPerPage);
 
   const [open, setOpen] = React.useState(false);
+
+  const [payments, setPayments] = React.useState<Payment[]>([]);
+
   const handleOpen = () => { setOpen(true); };
+
   const handleClose = () => { setOpen(false); };
+
+  useEffect(() => {
+    getPayments().then((data) => {
+      setPayments(data['payments']);
+    });
+  }, []);
+
+  console.log(payments);
+  const paginatedPayments = applyPagination(payments, page, rowsPerPage);
 
   return (
     <Stack spacing={3}>
@@ -81,7 +66,7 @@ export default function Page(): React.JSX.Element {
         rowsPerPage={rowsPerPage}
       />
 
-      <FormModal form={<PaymentsForm/>}
+      <FormModal form={<PaymentsForm setOpen={setOpen}/>}
                  open={open}
                  handleClose={handleClose}
       />

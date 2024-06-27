@@ -78,6 +78,8 @@ export function PaymentsTable({
   const handleClose = () => { setOpen(false); };
   const handleViewClose = () => { setViewOpen(false); };
 
+
+
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
@@ -105,7 +107,7 @@ export function PaymentsTable({
                   <TableCell>
                     <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
                       <Typography variant="subtitle2">{
-                        row.type === 'transferencia' ? 'Transferencia' : 'Efectivo '
+                        row.type === "transferencia" ? 'Transferencia' : 'Efectivo '
                           }</Typography>
                     </Stack>
                   </TableCell>

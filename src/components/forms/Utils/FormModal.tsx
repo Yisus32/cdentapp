@@ -7,7 +7,6 @@ export default function FormModal(props: any): React.JSX.Element {
   const { form, open, handleClose, width } = props;
 
   return (
-
       <Modal
         aria-labelledby="unstyled-modal-title"
         aria-describedby="unstyled-modal-description"

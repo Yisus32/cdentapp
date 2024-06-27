@@ -6,6 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import {useEffect} from "react";
 
 const states = [
   { value: 'transaction', label: 'Transferencia' },
@@ -16,13 +17,37 @@ export function FormInputs(props): React.JSX.Element {
 
   const { data } = props;
 
+  const [userId, setUserId] = React.useState(data?.user_id);
   const [type, setType] = React.useState(data?.type);
   const [amount, setAmount] = React.useState(data?.amount);
   const [refCode, setRefCode] = React.useState(data?.refCode);
   const [createdAt, setCreatedAt] = React.useState(data?.createdAt);
 
+  useEffect(() => {
+    const data = {
+      user_id: userId,
+      type: type,
+      amount: amount,
+      refCode: refCode
+    }
+
+    props.setDataToSend(data);
+
+  }, [userId, type, amount, refCode]);
+
   return (
     <>
+      <FormControl fullWidth>
+        <InputLabel>Usuario</InputLabel>
+        <OutlinedInput label="user_id"
+                       name="user_id"
+                       type="number"
+                       value={userId}
+                       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                         setUserId(event.target.value);
+                       }}
+        />
+      </FormControl>
       <FormControl fullWidth>
         <InputLabel>Tipo</InputLabel>
         <Select defaultValue="Efectivo"

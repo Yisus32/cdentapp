@@ -2,23 +2,12 @@ import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
 import { Theme } from '@mui/material/styles';
-import InputLabel from '@mui/material/InputLabel';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-import RadioGroup from '@mui/material/RadioGroup';
-
-import Radio from '@mui/material/Radio';
-import {width} from "@mui/system";
-import {FormInputs} from "@/components/forms/Appoitment/FormInputs";
-import Divider from "@mui/material/Divider";
+import {createMedicalHistory, getMedicalHistoryById} from "@/services/UserServices";
+import {useEffect} from "react";
+import ClinicHistoryForm from "@/components/dashboard/customer/ClinicHistoryForm";
 
 
 const Item = styled(Paper)(({ theme }: { theme: Theme }) => ({
@@ -29,178 +18,167 @@ const Item = styled(Paper)(({ theme }: { theme: Theme }) => ({
 }));
 
 
-export default function ClinicHistory() {
+export default function ClinicHistory(props) {
+  const [dataToSend, setDataToSend] = React.useState({});
 
+  const saveMedicalHistory = () => {
+    createMedicalHistory(dataToSend).then((data) => {
+      props.setOpen(false)
+      window.location.reload();
+    });
+  }
+
+  const [age, setAge ] = React.useState(0);
+  const [child_number, setChildNumber] = React.useState(0);
+  const [weight, setWeight] = React.useState(0);
+  const [height, setHeight] = React.useState(0);
+  const [bloodType, setBloodType] = React.useState(false);
   const [disease, setDisease] = React.useState(false);
+  const [description_disease, setDescriptionDisease] = React.useState('');
   const [medicines, setMedicines] = React.useState(false);
+  const [description_medicines, setDescriptionMedicines] = React.useState('');
   const [sugery, setSugery] = React.useState(false);
+  const [description_sugery, setDescriptionSugery] = React.useState('');
   const [allergies, setAllergies] = React.useState(false);
+  const [description_allergies, setDescriptionAllergies] = React.useState('');
 
+
+
+  const handleAgeChange = (event) => {
+    setAge(event)
+  }
+
+  const handleChildNumberChange = (event) => {
+    setChildNumber(event)
+  }
+
+  const handleWeightChange = (event) => {
+    setWeight(event)
+  }
+
+  const handleHeightChange = (event) => {
+    setHeight(event)
+  }
+
+  const handleBloodTypeChange = (event) => {
+    setBloodType(event)
+  }
   const handleDiseaseChange = (event) => {
     setDisease(event.target.value === 'si' ? true : false)
+  }
+
+  const handleDescriptionDiseaseChange = (event) => {
+    setDescriptionDisease(event.target.value)
   }
 
   const handMedicinesChange = (event) => {
     setMedicines(event.target.value === 'si' ? true : false)
   }
 
+  const handleDescriptionMedicinesChange = (event) => {
+    setDescriptionMedicines(event.target.value)
+  }
+
 const handSurgeryChange = (event) => {
     setSugery(event.target.value === 'si' ? true : false)
 }
 
+const handleDescriptionSurgeryChange = (event) => {
+    setDescriptionSugery(event.target.value)
+}
 const handAllergiesChange = (event) => {
     setAllergies(event.target.value === 'si' ? true : false)
 }
+
+const handleDescriptionAllergiesChange = (event) => {
+    setDescriptionAllergies(event.target.value)
+}
+
+const composePayload = () => {
+  const data = {
+    age : age,
+    child_number: child_number,
+    weight : weight,
+    height : height,
+    bloodType : bloodType,
+    disease: disease,
+    description_disease: description_disease,
+    medicines: medicines,
+    description_medicines: description_medicines,
+    sugery: sugery,
+    description_sugery: description_sugery,
+    allergies: allergies,
+    description_allergies: description_allergies,
+    user_id : props.userId
+  }
+
+  setDataToSend(data);
+}
+
+const populateClinicHistory = () => {
+    getMedicalHistoryById(props.userId).then((data) => {
+      setAge(data.age)
+      setChildNumber(data.child_number)
+      setWeight(data.weight)
+      setHeight(data.height)
+      setBloodType(data.bloodType)
+      setDisease(data.disease)
+      setDescriptionDisease(data.description_disease)
+      setMedicines(data.medicines)
+      setDescriptionMedicines(data.description_medicines)
+      setSugery(data.sugery)
+      setDescriptionSugery(data.description_sugery)
+      setAllergies(data.allergies)
+      setDescriptionAllergies(data.description_allergies)
+    });
+}
+
+const renderFormIfNoDataSet = () => {
+    //TODO: Refactor this
+    if (
+      age > 0 &&
+      child_number === 0 &&
+      weight === 0 &&
+      height === 0 && !disease && !medicines && !sugery && !allergies
+    ) {
+      return (
+        <ClinicHistoryForm
+          handleAgeChange={handleAgeChange}
+          handleChildNumberChange={handleChildNumberChange}
+          handleHeightChange={handleHeightChange}
+          handleBloodTypeChange={handleBloodTypeChange}
+          handleDiseaseChange={handleDiseaseChange}
+          handleDescriptionDiseaseChange={handleDescriptionDiseaseChange}
+          handleWeightChange={handleWeightChange}
+          disease={disease}
+          handMedicinesChange={handMedicinesChange}
+          handleDescriptionMedicinesChange={handleDescriptionMedicinesChange}
+          medicines={medicines}
+          handSurgeryChange={handSurgeryChange}
+          handleDescriptionSurgeryChange={handleDescriptionSurgeryChange}
+          handAllergiesChange={handAllergiesChange}
+          handleDescriptionAllergiesChange={handleDescriptionAllergiesChange}
+          allergies={allergies}
+          saveMedicalHistory={saveMedicalHistory}
+          sugery={sugery}
+        />
+      )
+    }
+
+    return (<div>Historial Medico Cargado</div>)
+}
+
+useEffect(() => {
+  populateClinicHistory()
+  composePayload()
+}, [age, child_number, weight, height, disease, description_disease, medicines, description_medicines, sugery, description_sugery, allergies, description_allergies])
 
   return (
     <React.Fragment>
       <CssBaseline />
       <Container fixed>
         <Box sx={{ bgcolor: '#fff', height: '75vh'}} component="form" noValidate autoComplete="off">
-
-          <h1>Historial Medico</h1>
-
-          <h3>Informacion General</h3>
-          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3}}>
-            <Grid item xs={6} md={6}>
-              <TextField
-                id="age"
-                label="Edad"
-                type="number"
-              />
-            </Grid>
-
-            <Grid item xs={6} md={6}>
-              <TextField
-                id="child_number"
-                label="Nro. de Hijos"
-                type="number"
-              />
-            </Grid>
-
-            <Grid item xs={6} md={6}>
-              <TextField
-                id="weight"
-                label="Peso"
-                type="number"
-              />
-
-            </Grid>
-
-            <Grid item xs={6} md={6}>
-              <TextField
-                id="height"
-                label="Altura"
-                type="number"
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12}>
-              <InputLabel id="bloodtype">Grupo Sanguineo</InputLabel>
-              <Select
-                labelId="bloodtype"
-                id="bloodtype"
-                displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
-                style={{width: 500}}
-
-              >
-                <MenuItem value={'O'}>O+</MenuItem>
-                <MenuItem value={'O-'}>O-</MenuItem>
-                <MenuItem value={'A+'}>A+</MenuItem>
-                <MenuItem value={'A-'}>A-</MenuItem>
-                <MenuItem value={'B+'}>B+</MenuItem>
-                <MenuItem value={'B-'}>B-</MenuItem>
-                <MenuItem value={'AB+'}>AB+</MenuItem>
-                <MenuItem value={'AB-'}>AB-</MenuItem>
-              </Select>
-            </Grid>
-
-
-            <Grid item xs={6} md={6} >
-              <InputLabel id="disease">Posee una Enfermedad?</InputLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-                onChange={handleDiseaseChange}
-              >
-                  <FormControlLabel value="si" control={<Radio />} label="SI" />
-                  <FormControlLabel value="no" control={<Radio />} label="NO" />
-              </RadioGroup>
-            </Grid>
-
-            <Grid item xs={6} md={6}>
-              {
-                disease ? (<TextField id="standard-basic" label="Describa cual" variant="standard" />) : null
-              }
-            </Grid>
-
-            <Grid item xs={6} md={6} >
-              <InputLabel id="disease">Toma medicamentos?</InputLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-                onChange={handMedicinesChange}
-              >
-                <FormControlLabel value="si" control={<Radio />} label="SI" />
-                <FormControlLabel value="no" control={<Radio />} label="NO" />
-              </RadioGroup>
-            </Grid>
-
-            <Grid item xs={6} md={6}>
-              {
-                medicines ? (<TextField id="standard-basic" label="Describa cual" variant="standard" />) : null
-              }
-            </Grid>
-
-            <Grid item xs={6} md={6} >
-              <InputLabel id="disease">Ha tenido cirugias?</InputLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-                onChange={handSurgeryChange}
-              >
-                <FormControlLabel value="si" control={<Radio />} label="SI" />
-                <FormControlLabel value="no" control={<Radio />} label="NO" />
-              </RadioGroup>
-            </Grid>
-
-            <Grid item xs={6} md={6}>
-              {
-                sugery ? (<TextField id="standard-basic" label="Describa cual" variant="standard" />) : null
-              }
-            </Grid>
-
-            <Grid item xs={6} md={6} >
-              <InputLabel id="disease">Alergias?</InputLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-                onChange={handAllergiesChange}
-              >
-                <FormControlLabel value="si" control={<Radio />} label="SI" />
-                <FormControlLabel value="no" control={<Radio />} label="NO" />
-              </RadioGroup>
-            </Grid>
-
-            <Grid item xs={6} md={6}>
-              {
-                allergies ? (<TextField id="standard-basic" label="Describa cual" variant="standard" />) : null
-              }
-            </Grid>
-          </Grid>
-
-          <Stack spacing={5} sx={{ maxWidth: 'sm' }}>
-
-            <Divider />
-
-            <Button variant="contained">Guardar</Button>
-          </Stack>
-
+          {renderFormIfNoDataSet()}
         </Box>
       </Container>
     </React.Fragment>
