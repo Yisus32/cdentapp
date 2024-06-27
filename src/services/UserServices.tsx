@@ -45,7 +45,7 @@ export async function createMedicalHistory (data) {
 }
 
 
-export async function getMedicalHistoryById(id) {
+export async function getMedicalHistoryByUserId(id) {
   const response = await fetch(url + `medicalhistory/${id}`);
   return await response.json();
 }

@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask import abort
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cedent.db'
@@ -333,8 +334,10 @@ def create_medicalhistory():
 @app.route('/medicalhistory/<int:id>', methods=['GET'])
 def get_medicalhistory(id):
   medicalhistory = MedicalHistory.query.get(id)
+
   if not medicalhistory:
-    return jsonify({ "message" : "Historial Medico no encontrado!"}), 404
+    return jsonify({ "message" : "Historial Medico no encontrado!"}, 404)
+
   return jsonify(medicalhistory.serialize())
 
 

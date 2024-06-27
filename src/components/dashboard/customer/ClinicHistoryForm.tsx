@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
 
 const ClinicHistoryForm = (props) => {
   const {
@@ -42,73 +43,84 @@ const ClinicHistoryForm = (props) => {
       <h3>Informacion General</h3>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3}}>
         <Grid item xs={6} md={6}>
-          <OutlinedInput
-            id="age"
-            label="Edad"
-            type="number"
-            onChange={(event) => {
-              handleAgeChange(event.target.value)
-            }}
-          />
+          <FormControl fullWidth>
+            <InputLabel>Edad</InputLabel>
+            <OutlinedInput
+              id="age"
+              label="Edad"
+              type="number"
+              onChange={(event) => {
+                handleAgeChange(event.target.value)
+              }}
+            />
+          </FormControl>
         </Grid>
 
         <Grid item xs={6} md={6}>
-          <OutlinedInput
-            id="child_number"
-            label="Nro. de Hijos"
-            type="number"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              handleChildNumberChange(event.target.value)
-            }}
-          />
+          <FormControl fullWidth>
+            <InputLabel>Nro. de Hijos</InputLabel>
+            <OutlinedInput
+              id="child_number"
+              label="Nro. de Hijos"
+              type="number"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                handleChildNumberChange(event.target.value)
+              }}
+            />
+          </FormControl>
         </Grid>
 
         <Grid item xs={6} md={6}>
-          <OutlinedInput
-            id="weight"
-            label="Peso"
-            type="number"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              handleWeightChange(event.target.value)
-            }}
-          />
-
+          <FormControl fullWidth>
+            <InputLabel>Peso</InputLabel>
+            <OutlinedInput
+              id="weight"
+              label="Peso"
+              type="number"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                handleWeightChange(event.target.value)
+              }}
+            />
+          </FormControl>
         </Grid>
 
         <Grid item xs={6} md={6}>
-          <OutlinedInput
-            id="height"
-            label="Altura"
-            type="number"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              handleHeightChange(event.target.value)
-            }}
-
-          />
+          <FormControl fullWidth>
+            <InputLabel>Altura</InputLabel>
+            <OutlinedInput
+              id="height"
+              label="Altura"
+              type="number"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                handleHeightChange(event.target.value)
+              }}
+            />
+          </FormControl>
         </Grid>
 
         <Grid item xs={12} md={12}>
-          <InputLabel id="bloodtype">Grupo Sanguineo</InputLabel>
-          <Select
-            labelId="bloodtype"
-            id="bloodtype"
-            displayEmpty
-            inputProps={{ 'aria-label': 'Without label' }}
-            style={{width: 500}}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              handleBloodTypeChange(event.target.value)
-            }}
-
-          >
-            <MenuItem value={'O'}>O+</MenuItem>
-            <MenuItem value={'O-'}>O-</MenuItem>
-            <MenuItem value={'A+'}>A+</MenuItem>
-            <MenuItem value={'A-'}>A-</MenuItem>
-            <MenuItem value={'B+'}>B+</MenuItem>
-            <MenuItem value={'B-'}>B-</MenuItem>
-            <MenuItem value={'AB+'}>AB+</MenuItem>
-            <MenuItem value={'AB-'}>AB-</MenuItem>
-          </Select>
+          <FormControl fullWidth>
+            <InputLabel id="bloodtype">Grupo Sanguineo</InputLabel>
+            <Select
+              labelId="bloodtype"
+              id="bloodtype"
+              displayEmpty
+              inputProps={{ 'aria-label': 'Without label' }}
+              style={{width: 500}}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                handleBloodTypeChange(event.target.value)
+              }}
+            >
+              <MenuItem value={'O'}>O+</MenuItem>
+              <MenuItem value={'O-'}>O-</MenuItem>
+              <MenuItem value={'A+'}>A+</MenuItem>
+              <MenuItem value={'A-'}>A-</MenuItem>
+              <MenuItem value={'B+'}>B+</MenuItem>
+              <MenuItem value={'B-'}>B-</MenuItem>
+              <MenuItem value={'AB+'}>AB+</MenuItem>
+              <MenuItem value={'AB-'}>AB-</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
 
 

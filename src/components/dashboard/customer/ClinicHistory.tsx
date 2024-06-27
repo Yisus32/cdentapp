@@ -5,9 +5,10 @@ import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import { Theme } from '@mui/material/styles';
-import {createMedicalHistory, getMedicalHistoryById} from "@/services/UserServices";
+import {createMedicalHistory, getMedicalHistoryByUserId} from "@/services/UserServices";
 import {useEffect} from "react";
 import ClinicHistoryForm from "@/components/dashboard/customer/ClinicHistoryForm";
+import MedicalHistoryGrid from "@/components/dashboard/customer/MedicalHistoryGrid";
 
 
 const Item = styled(Paper)(({ theme }: { theme: Theme }) => ({
@@ -41,6 +42,7 @@ export default function ClinicHistory(props) {
   const [description_sugery, setDescriptionSugery] = React.useState('');
   const [allergies, setAllergies] = React.useState(false);
   const [description_allergies, setDescriptionAllergies] = React.useState('');
+  const [showForm, setShowForm] = React.useState(false);
 
 
 
@@ -116,7 +118,18 @@ const composePayload = () => {
 }
 
 const populateClinicHistory = () => {
-    getMedicalHistoryById(props.userId).then((data) => {
+    getMedicalHistoryByUserId(props.userId).then((data) => {
+
+      //Verificamos si el servidor nos indica que no existe un historial medico
+      if (data.length === 2 && data?.includes(404)) {
+        //si no existe un historial medico, mostramos el formulario para crear uno
+        setShowForm(true)
+
+        //finalizamos el proceso
+        return;
+      }
+
+      //si existe un historial medico, lo cargamos en los estados para motrar la data en un GRID
       setAge(data.age)
       setChildNumber(data.child_number)
       setWeight(data.weight)
@@ -130,17 +143,20 @@ const populateClinicHistory = () => {
       setDescriptionSugery(data.description_sugery)
       setAllergies(data.allergies)
       setDescriptionAllergies(data.description_allergies)
-    });
+
+      //Ocultamos el formulario
+      setShowForm(false)
+
+      return;
+    }).catch((error) => {
+      console.error(error)
+  });
 }
 
 const renderFormIfNoDataSet = () => {
-    //TODO: Refactor this
-    if (
-      age > 0 &&
-      child_number === 0 &&
-      weight === 0 &&
-      height === 0 && !disease && !medicines && !sugery && !allergies
-    ) {
+
+    //Si showForm (mostrarFormulario) es verdadero, mostramos el formulario
+    if (showForm) {
       return (
         <ClinicHistoryForm
           handleAgeChange={handleAgeChange}
@@ -165,7 +181,8 @@ const renderFormIfNoDataSet = () => {
       )
     }
 
-    return (<div>Historial Medico Cargado</div>)
+    //Si no, entonces aqui mostramos la data con el GRID
+    return (<MedicalHistoryGrid/>)
 }
 
 useEffect(() => {
