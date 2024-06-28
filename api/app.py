@@ -350,6 +350,8 @@ def get_medicalhistory(id):
   return jsonify(medicalhistory.serialize())
 
 
+#obtener usuario en Select
+
 
 
 

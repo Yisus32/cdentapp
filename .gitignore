@@ -18,6 +18,7 @@ out
 .eslintcache
 .idea
 /.env
+/api/env-api
 /.env.local
 /.env.development.local
 /.env.test.local

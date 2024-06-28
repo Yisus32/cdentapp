@@ -266,7 +266,7 @@
         "kind": 2,
         "importPath": "api.app",
         "description": "api.app",
-        "peekOfCode": "def get_medicalhistory(id):\n  medicalhistory = MedicalHistory.query.get(id)\n  if not medicalhistory:\n    return jsonify({ \"message\" : \"Historial Medico no encontrado!\"}, 404)\n  return jsonify(medicalhistory.serialize())",
+        "peekOfCode": "def get_medicalhistory(id):\n  medicalhistory = MedicalHistory.query.get(id)\n  if not medicalhistory:\n    return jsonify({ \"message\" : \"Historial Medico no encontrado!\"}, 404)\n  return jsonify(medicalhistory.serialize())\n#obtener usuario en Select",
         "detail": "api.app",
         "documentation": {}
     },
