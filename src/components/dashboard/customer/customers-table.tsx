@@ -130,7 +130,7 @@ export function CustomersTable({
 
                   <TableCell>
                     <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                      <Typography variant="subtitle2">{row.role_id}</Typography>
+                      <Typography variant="subtitle2">{row.rol_id}</Typography>
                     </Stack>
                   </TableCell>
 

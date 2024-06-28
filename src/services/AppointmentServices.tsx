@@ -40,3 +40,17 @@ export async function deleteAppointment(id) {
     return await response.json();
 
 }
+
+
+export async function getUsersByMedicalRol(rol_id){
+  const response = await fetch ( url + `getUsersByMedicalRol/${rol_id}`);
+    return await response.json();
+}
+
+
+export async function getUsersByPatientRol(rol_id){
+  const response = await fetch ( url + `getUsersByPatientRol/${rol_id}`);
+    return await response.json();
+}
+
+

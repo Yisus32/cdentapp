@@ -52,7 +52,7 @@ export function ResetPasswordForm(): React.JSX.Element {
 
   return (
     <Stack spacing={4}>
-      <Typography variant="h5">Reset password</Typography>
+      <Typography variant="h5">Restaurar contraseña</Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           <Controller
@@ -60,15 +60,15 @@ export function ResetPasswordForm(): React.JSX.Element {
             name="email"
             render={({ field }) => (
               <FormControl error={Boolean(errors.email)}>
-                <InputLabel>Email address</InputLabel>
-                <OutlinedInput {...field} label="Email address" type="email" />
+                <InputLabel>Email </InputLabel>
+                <OutlinedInput {...field} label="Email " type="email" />
                 {errors.email ? <FormHelperText>{errors.email.message}</FormHelperText> : null}
               </FormControl>
             )}
           />
           {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
           <Button disabled={isPending} type="submit" variant="contained">
-            Send recovery link
+            Enviar Link
           </Button>
         </Stack>
       </form>

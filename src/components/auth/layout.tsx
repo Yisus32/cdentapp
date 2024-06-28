@@ -46,18 +46,18 @@ export function Layout({ children }: LayoutProps): React.JSX.Element {
             <Typography color="inherit" sx={{ fontSize: '24px', lineHeight: '32px', textAlign: 'center' }} variant="h1">
               Welcome to{' '}
               <Box component="span" sx={{ color: '#15b79e' }}>
-                Devias Kit
+                Cedent App
               </Box>
             </Typography>
             <Typography align="center" variant="subtitle1">
-              A professional template that comes with ready-to-use MUI components.
+             El servicio es por y para ustedes
             </Typography>
           </Stack>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Box
               component="img"
               alt="Widgets"
-              src="/assets/auth-widgets.png"
+              src="/assets/logoCedent.svg"
               sx={{ height: 'auto', width: '100%', maxWidth: '600px' }}
             />
           </Box>

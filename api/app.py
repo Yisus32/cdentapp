@@ -350,9 +350,26 @@ def get_medicalhistory(id):
   return jsonify(medicalhistory.serialize())
 
 
-#obtener usuario en Select
+#obtener medico en Select
+@app.route('/getUsersByMedicalRol/<int:id>',methods=['GET'])
+def getUsersByMedicalRol(id):
+  users = User.query.filter(User.rol_id == id).all()
+  if not users:
+    return jsonify({"message": "No existe rol"}, 404)  # Devuelve el rol del usuario como respuesta en formato JSON
+  
+  serialized_users = [user.serialize() for user in users]
+  response = jsonify(serialized_users)
+  response.headers.add("Access-Control-Allow-Origin", "*")
+  return response
 
-
-
-
-
+#obtener paciente en Select
+@app.route('/getUsersByPatientRol/<int:rol_id>',methods=['GET'])
+def getUsersByPatientRol(rol_id):
+  users = User.query.filter(User.rol_id == rol_id).all()
+  if not users:
+    return jsonify({"message": "No existe rol"}, 404)  # Devuelve el rol del usuario como respuesta en formato JSON
+  
+  serialized_users = [user.serialize() for user in users]
+  response = jsonify(serialized_users)
+  response.headers.add("Access-Control-Allow-Origin", "*")
+  return response

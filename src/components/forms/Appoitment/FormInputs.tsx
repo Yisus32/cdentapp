@@ -6,6 +6,8 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import {useEffect} from "react";
+import { getUsersByMedicalRol } from '@/services/AppointmentServices';
+import {getUsersByPatientRol} from '@/services/AppointmentServices'
 
 const states = [
   { value: 'Consulta', label: 'Consulta' },
@@ -23,6 +25,8 @@ export function FormInputs(props): React.JSX.Element {
   const [state, setState] = React.useState(data?.state);
   const [status, setStatus] = React.useState(data?.status);
   const [user, setUser] = React.useState(data?.user);
+  const [medicList, setMedicList] = React.useState([]);
+  const [patientList, setPatientList] = React.useState([]);
 
   const formatAndSetDate = (date) => {
     const summonDate = new Date(date)
@@ -46,6 +50,24 @@ export function FormInputs(props): React.JSX.Element {
 
     }, [user, date,medicalProfessional, patient ,state, status]);
 
+  useEffect(() => {
+    getUsersByMedicalRol(3).then(response => {
+      console.log(response)
+      setMedicList(response)
+    })
+  }, [])
+
+  console.log(medicList)
+
+
+  useEffect(() => {
+    getUsersByPatientRol(2).then(response => {
+      setPatientList(response)
+    })
+  }, [])
+
+  console.log(patientList)
+
   return (
     <>
       <FormControl fullWidth>
@@ -64,17 +86,33 @@ export function FormInputs(props): React.JSX.Element {
 
       <FormControl fullWidth>
         <InputLabel>Paciente</InputLabel>
-        <OutlinedInput label="patient" name="patient" type="number" value={patient} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setPatient(event.target.value);
-        }}/>
+        <Select defaultValue="patient" label="patient" name="patient" variant="outlined" value={patientList} onChange={
+          (event: React.ChangeEvent<{ value: unknown }>) => {
+            setPatientList(event.target.value);
+          }
+        }>
+          {patientList.map((patient) => (
+            <MenuItem key={patient.id} value={patient.id}>
+              {patient.name} {patient.lastname}
+            </MenuItem>
+          ))}
+        </Select>
       </FormControl>
 
 
       <FormControl fullWidth>
         <InputLabel>Medico</InputLabel>
-        <OutlinedInput label="doctor" name="doctor" type="number" value={medicalProfessional} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setMedicalProfessional(event.target.value);
-        }} />
+        <Select defaultValue="medical" label="medical" name="medical" variant="outlined" value={medicList} onChange={
+          (event: React.ChangeEvent<{ value: unknown }>) => {
+            setMedicList(event.target.value);
+          }
+        }>
+          {medicList.map((medic) => (
+            <MenuItem key={medic.id} value={medic.id}>
+              {medic.name} {medic.lastname}
+            </MenuItem>
+          ))}
+        </Select>
       </FormControl>
 
 

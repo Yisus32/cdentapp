@@ -266,7 +266,25 @@
         "kind": 2,
         "importPath": "api.app",
         "description": "api.app",
-        "peekOfCode": "def get_medicalhistory(id):\n  medicalhistory = MedicalHistory.query.get(id)\n  if not medicalhistory:\n    return jsonify({ \"message\" : \"Historial Medico no encontrado!\"}, 404)\n  return jsonify(medicalhistory.serialize())\n#obtener usuario en Select",
+        "peekOfCode": "def get_medicalhistory(id):\n  medicalhistory = MedicalHistory.query.get(id)\n  if not medicalhistory:\n    return jsonify({ \"message\" : \"Historial Medico no encontrado!\"}, 404)\n  return jsonify(medicalhistory.serialize())\n#obtener medico en Select\n@app.route('/getUsersByMedicalRol/<int:id>',methods=['GET'])\ndef getUsersByMedicalRol(id):\n  users = User.query.filter(User.rol_id == id).all()\n  if not users:",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "getUsersByMedicalRol",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def getUsersByMedicalRol(id):\n  users = User.query.filter(User.rol_id == id).all()\n  if not users:\n    return jsonify({\"message\": \"No existe rol\"}, 404)  # Devuelve el rol del usuario como respuesta en formato JSON\n  serialized_users = [user.serialize() for user in users]\n  response = jsonify(serialized_users)\n  response.headers.add(\"Access-Control-Allow-Origin\", \"*\")\n  return response\n#obtener paciente en Select\n@app.route('/getUsersByPatientRol/<int:rol_id>',methods=['GET'])",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "getUsersByPatientRol",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def getUsersByPatientRol(rol_id):\n  users = User.query.filter(User.rol_id == rol_id).all()\n  if not users:\n    return jsonify({\"message\": \"No existe rol\"}, 404)  # Devuelve el rol del usuario como respuesta en formato JSON\n  serialized_users = [user.serialize() for user in users]\n  response = jsonify(serialized_users)\n  response.headers.add(\"Access-Control-Allow-Origin\", \"*\")\n  return response",
         "detail": "api.app",
         "documentation": {}
     },
