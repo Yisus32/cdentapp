@@ -28,3 +28,15 @@ export async function putAppointment(data, id) {
 
   return await response.json();
 }
+
+export async function deleteAppointment(id) {
+  const response = await fetch (url + `appointment/${id}`, {
+    method : 'DELETE',
+    headers:{
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
+    return await response.json();
+
+}

@@ -29,10 +29,10 @@ export default function ClinicHistory(props) {
     });
   }
 
-  const [age, setAge ] = React.useState(0);
-  const [child_number, setChildNumber] = React.useState(0);
-  const [weight, setWeight] = React.useState(0);
-  const [height, setHeight] = React.useState(0);
+  const [age, setAge ] = React.useState(false);
+  const [child_number, setChildNumber] = React.useState(false);
+  const [weight, setWeight] = React.useState(false);
+  const [height, setHeight] = React.useState(false);
   const [bloodType, setBloodType] = React.useState(false);
   const [disease, setDisease] = React.useState(false);
   const [description_disease, setDescriptionDisease] = React.useState('');
@@ -43,6 +43,7 @@ export default function ClinicHistory(props) {
   const [allergies, setAllergies] = React.useState(false);
   const [description_allergies, setDescriptionAllergies] = React.useState('');
   const [showForm, setShowForm] = React.useState(false);
+  const [dataToDisplay, setDataToDisplay] = React.useState({});
 
 
 
@@ -144,6 +145,25 @@ const populateClinicHistory = () => {
       setAllergies(data.allergies)
       setDescriptionAllergies(data.description_allergies)
 
+      const displayData = {
+        age,
+        child_number,
+        weight,
+        height,
+        bloodType,
+        disease,
+        description_disease,
+        medicines,
+        description_medicines,
+        sugery,
+        description_sugery,
+        allergies,
+        description_allergies
+
+      }
+
+      setDataToDisplay(displayData)
+
       //Ocultamos el formulario
       setShowForm(false)
 
@@ -182,7 +202,7 @@ const renderFormIfNoDataSet = () => {
     }
 
     //Si no, entonces aqui mostramos la data con el GRID
-    return (<MedicalHistoryGrid/>)
+    return (<MedicalHistoryGrid dataToSend={dataToDisplay} />)
 }
 
 useEffect(() => {
@@ -194,7 +214,7 @@ useEffect(() => {
     <React.Fragment>
       <CssBaseline />
       <Container fixed>
-        <Box sx={{ bgcolor: '#fff', height: '75vh'}} component="form" noValidate autoComplete="off">
+        <Box sx={{ bgcolor: '#fff', height: '90vh'}} component="form" noValidate autoComplete="off">
           {renderFormIfNoDataSet()}
         </Box>
       </Container>

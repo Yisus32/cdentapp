@@ -1,0 +1,471 @@
+[
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "abort",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "SQLAlchemy",
+        "importPath": "flask_sqlalchemy",
+        "description": "flask_sqlalchemy",
+        "isExtraImport": true,
+        "detail": "flask_sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "stringify",
+        "importPath": "flatted",
+        "description": "flatted",
+        "isExtraImport": true,
+        "detail": "flatted",
+        "documentation": {}
+    },
+    {
+        "label": "parse",
+        "importPath": "flatted",
+        "description": "flatted",
+        "isExtraImport": true,
+        "detail": "flatted",
+        "documentation": {}
+    },
+    {
+        "label": "Role",
+        "kind": 6,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "class Roles (db.Model):\n      id = db.Column(db.Integer, primary_key=True, autoincrement=True)\n      name_rol = db.Column(db.String(80), nullable=False)\n      permissions= db.Column(db.String(80), nullable=False)\n      def serialize(self):\n          return {\n              'id': self.id,\n              'name_rol': self.name_rol,\n              'permissions': self.permissions\n          }",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "User",
+        "kind": 6,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "class User(db.Model):\n    id = db.Column(db.Integer, primary_key=True, autoincrement=True)\n    name = db.Column(db.String(80), unique=True, nullable=False)\n    lastname = db.Column(db.String(80), unique=False, nullable=False)\n    rol_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)\n    dni = db.Column(db.String(80), unique=True, nullable=False)\n    phone = db.Column(db.String(80), unique=False, nullable=False)\n    email = db.Column(db.String(120), unique=True, nullable=False)\n    address = db.Column(db.String(120), unique=False, nullable=False)\n    password = db.Column(db.String(120), unique=False, nullable=False)",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "Payment",
+        "kind": 6,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "class Payment(db.Model):\n      id = db.Column(db.Integer, primary_key=True, autoincrement=True)\n      user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)\n      refCode = db.Column(db.String(80), nullable=False)\n      amount = db.Column(db.Float, nullable=False)\n      type = db.Column(db.String(80), nullable=False)\n      created_at = db.Column(db.DateTime, server_default=db.func.now())\n      def serialize(self):\n          return {\n              'id': self.id,",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "Appointment",
+        "kind": 6,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "class Appointments (db.Model):\n      id = db.Column(db.Integer, primary_key=True, autoincrement=True)\n      user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)\n      date = db.Column(db.DateTime, server_default=db.func.now())\n      patient_id = db.Column(db.String(80), nullable=False)\n      status = db.Column(db.String(80), nullable=False)\n      state = db.Column(db.String(80), nullable=False)\n      doctor_id = db.Column(db.String(80), nullable=False)\n      created_at = db.Column(db.DateTime, server_default=db.func.now())\n      def serialize(self):",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "MedicalHistor",
+        "kind": 6,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "class MedicalHistory (db.Model):\n      id = db.Column(db.Integer, primary_key=True, autoincrement=True)\n      user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)\n      age = db.Column(db.Integer, nullable=False)\n      child_number = db.Column(db.Integer, nullable=False)\n      weight = db.Column(db.Float, nullable=False)\n      height = db.Column(db.Float, nullable=False)\n      bloodtype = db.Column(db.String(80), nullable=False)\n      disease = db.Column(db.String(80), nullable=False)\n      description_disease = db.Column(db.String(80), nullable=False)",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "get_users",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def get_users():\n  users = User.query.all()\n  response = jsonify({ 'users' :[user.serialize()  for user in users]})\n  response.headers.add(\"Access-Control-Allow-Origin\", \"*\")\n  return response\n@app.route('/users', methods=['POST'])\ndef create_user():\n  data = request.get_json()\n  user = User(name=data['name'], lastname=data['lastname'], dni=data['dni'], phone=data['phone'], email=data['email'], address=data['address'], password = data ['password'] , rol_id=data['rol_id'])\n  db.session.add(user)",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "create_user",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def create_user():\n  data = request.get_json()\n  user = User(name=data['name'], lastname=data['lastname'], dni=data['dni'], phone=data['phone'], email=data['email'], address=data['address'], password = data ['password'] , rol_id=data['rol_id'])\n  db.session.add(user)\n  db.session.commit()\n  return jsonify({ \"message\" : \"Usuario Creado con Exito!\", \"user\": user.serialize()}), 201\n#Obtener un Usuario\n@app.route('/user/<int:id>', methods=['GET'])\ndef get_user(id):\n  user = User.query.get(id)",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "get_user",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def get_user(id):\n  user = User.query.get(id)\n  if not user:\n    return jsonify({ \"message\" : \"Usuario no encontrado!\"}), 404\n  return jsonify(user.serialize())\n#Editar un Usuario\n@app.route('/user/<int:id>', methods=['PUT'])\ndef update_user(id):\n  user = User.query.get(id)\n  if not user:",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "update_user",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def update_user(id):\n  user = User.query.get(id)\n  if not user:\n    return jsonify({ \"message\" : \"Usuario no encontrado!\"}), 404\n  data = request.get_json()\n  user.name = data['name']\n  user.lastname = data['lastname']\n  user.dni = data['dni']\n  user.phone = data['phone']\n  user.email = data['email']",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "delete_user",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def delete_user(id):\n  user = User.query.get(id)\n  if user:\n        historial_medico = MedicalHistory.query.filter_by(user_id=id).first()\n        if historial_medico:\n            db.session.delete(historial_medico)\n        db.session.delete(user)\n        db.session.commit()\n  return jsonify({ \"message\" : \"Usuario Eliminado con Exito!\"})\n#Funciones de Payment",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "get_payments",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def get_payments():\n  payments = Payment.query.all()\n  response = jsonify({ 'payments' :[payment.serialize()  for payment in payments]})\n  response.headers.add(\"Access-Control-Allow-Origin\", \"*\")\n  return response\n@app.route('/payments', methods=['POST'])\ndef create_payment():\n  data = request.get_json()\n  payment = Payment(user_id=data['user_id'], refCode=data['refCode'], amount=data['amount'], type=data['type'])\n  db.session.add(payment)",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "create_payment",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def create_payment():\n  data = request.get_json()\n  payment = Payment(user_id=data['user_id'], refCode=data['refCode'], amount=data['amount'], type=data['type'])\n  db.session.add(payment)\n  db.session.commit()\n  return jsonify({ \"message\" : \"Pago Creado con Exito!\", \"payment\": payment.serialize()}), 201\n #obtener un pago\n@app.route('/payment/<int:id>', methods=['GET'])\ndef get_payment(id):\n  payment = Payment.query.get(id)",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "get_payment",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def get_payment(id):\n  payment = Payment.query.get(id)\n  if not payment:\n    return jsonify({ \"message\" : \"Pago no encontrado!\"}), 404\n  return jsonify(payment.serialize())\n#Editar un Pago\n@app.route('/payment/<int:id>', methods=['PUT'])\ndef update_payment(id):\n  payment = Payment.query.get(id)\n  if not payment:",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "update_payment",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def update_payment(id):\n  payment = Payment.query.get(id)\n  if not payment:\n    return jsonify({ \"message\" : \"Pago no encontrado!\"}), 404\n  data = request.get_json()\n  payment.user_id = data['user_id']\n  payment.refCode = data['refCode']\n  payment.amount = data['amount']\n  payment.type = data['type']\n  db.session.commit()",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "deletepayment",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def deletepayment(id):\n  payment = Payment.query.get(id)\n  if not payment:\n    return jsonify({ \"message\" : \"Pago no encontrado!\"}), 404\n  db.session.delete(payment)\n  db.session.commit()\n  return jsonify({ \"message\" : \"Pago Eliminado con Exito!\"})\n#Funciones de Appointment\n# Crear y Listar una Cita\n@app.route('/appointments', methods=['GET'])",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "get_appointments",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def get_appointments():\n  appointments = Appointments.query.all()\n  response = jsonify({ 'appointments' :[appointment.serialize()  for appointment in appointments]})\n  response.headers.add(\"Access-Control-Allow-Origin\", \"*\")\n  return response\n@app.route('/appointments', methods=['POST'])\ndef create_appointment():\n  data = request.get_json()\n  formattedDateTime = datetime.strptime(data['date'], '%Y-%m-%d').date()\n  appointment = Appointments(user_id=data['user_id'], date=formattedDateTime, patient_id=data['patient_id'], status=data['status'], state = data['state'], doctor_id=data['doctor_id'])",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "create_appointment",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def create_appointment():\n  data = request.get_json()\n  formattedDateTime = datetime.strptime(data['date'], '%Y-%m-%d').date()\n  appointment = Appointments(user_id=data['user_id'], date=formattedDateTime, patient_id=data['patient_id'], status=data['status'], state = data['state'], doctor_id=data['doctor_id'])\n  db.session.add(appointment)\n  db.session.commit()\n  return jsonify({ \"message\" : \"Cita Creada con Exito!\", \"appointment\": appointment.serialize()}), 201\n#obtener una cita\n@app.route('/appointment/<int:id>', methods=['GET'])\ndef get_appointment(id):",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "get_appointment",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def get_appointment(id):\n  appointment = Appointments.query.get(id)\n  if not appointment:\n    return jsonify({ \"message\" : \"Cita no encontrada!\"}), 404\n  return jsonify(appointment.serialize())\n#Editar una Cita\n@app.route('/appointment/<int:id>', methods=['PUT'])\ndef update_appointment(id):\n  appointment = Appointments.query.get(id)\n  if not appointment:",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "update_appointment",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def update_appointment(id):\n  appointment = Appointments.query.get(id)\n  if not appointment:\n    return jsonify({ \"message\" : \"Cita no encontrada!\"}), 404\n  data = request.get_json()\n  formattedDateTime = datetime.strptime(data['date'], '%Y-%m-%d').date()\n  appointment.user_id = data['user_id']\n  appointment.date = formattedDateTime\n  appointment.patient_id = data['patient_id']\n  appointment.status = data['status']",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "delete_appointment",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def delete_appointment(id):\n  appointment = Appointments.query.get(id)\n  if not appointment:\n    return jsonify({ \"message\" : \"Cita no encontrada!\"}), 404\n  db.session.delete(appointment)\n  db.session.commit()\n  return jsonify({ \"message\" : \"Cita Eliminada con Exito!\"})\n  # Guardar Historial medico\n@app.route('/medicalhistory', methods=['POST'])\ndef create_medicalhistory():",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "create_medicalhistory",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def create_medicalhistory():\n  data = request.get_json()\n  medicalhistory = MedicalHistory(user_id=data['user_id'],\n  age=data['age'],\n  child_number=data['child_number'],\n  weight=data['weight'],\n  height=data ['height'],\n  bloodtype=data['bloodType'],\n  disease=data['disease'], description_disease= data ['description_disease'] ,\n  medicines=data['medicines'],",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "get_medicalhistory",
+        "kind": 2,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "def get_medicalhistory(id):\n  medicalhistory = MedicalHistory.query.get(id)\n  if not medicalhistory:\n    return jsonify({ \"message\" : \"Historial Medico no encontrado!\"}, 404)\n  return jsonify(medicalhistory.serialize())",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "app = Flask(__name__)\napp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cedent.db'\ndb = SQLAlchemy(app)\n# Define the model\nclass Roles (db.Model):\n      id = db.Column(db.Integer, primary_key=True, autoincrement=True)\n      name_rol = db.Column(db.String(80), nullable=False)\n      permissions= db.Column(db.String(80), nullable=False)\n      def serialize(self):\n          return {",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "app.config['SQLALCHEMY_DATABASE_URI']",
+        "kind": 5,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cedent.db'\ndb = SQLAlchemy(app)\n# Define the model\nclass Roles (db.Model):\n      id = db.Column(db.Integer, primary_key=True, autoincrement=True)\n      name_rol = db.Column(db.String(80), nullable=False)\n      permissions= db.Column(db.String(80), nullable=False)\n      def serialize(self):\n          return {\n              'id': self.id,",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "kind": 5,
+        "importPath": "api.app",
+        "description": "api.app",
+        "peekOfCode": "db = SQLAlchemy(app)\n# Define the model\nclass Roles (db.Model):\n      id = db.Column(db.Integer, primary_key=True, autoincrement=True)\n      name_rol = db.Column(db.String(80), nullable=False)\n      permissions= db.Column(db.String(80), nullable=False)\n      def serialize(self):\n          return {\n              'id': self.id,\n              'name_rol': self.name_rol,",
+        "detail": "api.app",
+        "documentation": {}
+    },
+    {
+        "label": "_Known",
+        "kind": 6,
+        "importPath": "node_modules.flatted.python.flatted",
+        "description": "node_modules.flatted.python.flatted",
+        "peekOfCode": "class _Known:\n    def __init__(self):\n        self.key = []\n        self.value = []\nclass _String:\n    def __init__(self, value):\n        self.value = value\ndef _array_keys(value):\n    keys = []\n    i = 0",
+        "detail": "node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "_String",
+        "kind": 6,
+        "importPath": "node_modules.flatted.python.flatted",
+        "description": "node_modules.flatted.python.flatted",
+        "peekOfCode": "class _String:\n    def __init__(self, value):\n        self.value = value\ndef _array_keys(value):\n    keys = []\n    i = 0\n    for _ in value:\n        keys.append(i)\n        i += 1\n    return keys",
+        "detail": "node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "parse",
+        "kind": 2,
+        "importPath": "node_modules.flatted.python.flatted",
+        "description": "node_modules.flatted.python.flatted",
+        "peekOfCode": "def parse(value, *args, **kwargs):\n    json = _json.loads(value, *args, **kwargs)\n    wrapped = []\n    for value in json:\n        wrapped.append(_wrap(value))\n    input = []\n    for value in wrapped:\n        if isinstance(value, _String):\n            input.append(value.value)\n        else:",
+        "detail": "node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "stringify",
+        "kind": 2,
+        "importPath": "node_modules.flatted.python.flatted",
+        "description": "node_modules.flatted.python.flatted",
+        "peekOfCode": "def stringify(value, *args, **kwargs):\n    known = _Known()\n    input = []\n    output = []\n    i = int(_index(known, input, value))\n    while i < len(input):\n        output.append(_transform(known, input, input[i]))\n        i += 1\n    return _json.dumps(output, *args, **kwargs)",
+        "detail": "node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "stringify",
+        "kind": 2,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "def stringify(value):\n    return _stringify(value, separators=(',', ':'))\nassert stringify([None, None]) == '[[null,null]]'\na = []\no = {}\nassert stringify(a) == '[[]]'\nassert stringify(o) == '[{}]'\na.append(a)\no['o'] = o\nassert stringify(a) == '[[\"0\"]]'",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "a",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "a = []\no = {}\nassert stringify(a) == '[[]]'\nassert stringify(o) == '[{}]'\na.append(a)\no['o'] = o\nassert stringify(a) == '[[\"0\"]]'\nassert stringify(o) == '[{\"o\":\"0\"}]'\nb = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "o = {}\nassert stringify(a) == '[[]]'\nassert stringify(o) == '[{}]'\na.append(a)\no['o'] = o\nassert stringify(a) == '[[\"0\"]]'\nassert stringify(o) == '[{\"o\":\"0\"}]'\nb = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b\na.append(1)",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['o']",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "o['o'] = o\nassert stringify(a) == '[[\"0\"]]'\nassert stringify(o) == '[{\"o\":\"0\"}]'\nb = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b\na.append(1)\na.append('two')\na.append(True)\no['one'] = 1\no['two'] = 'two'",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "b",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "b = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b\na.append(1)\na.append('two')\na.append(True)\no['one'] = 1\no['two'] = 'two'\no['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['one']",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "o['one'] = 1\no['two'] = 'two'\no['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'\na.append(o)\no['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['two']",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "o['two'] = 'two'\no['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'\na.append(o)\no['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})\na.append([1, 2, 3])",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['three']",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "o['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'\na.append(o)\no['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})\na.append([1, 2, 3])\no['test'] = {'test': 'OK'}",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['a']",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "o['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})\na.append([1, 2, 3])\no['test'] = {'test': 'OK'}\no['array'] = [1, 2, 3]\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\",\"3\",\"4\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\",\"test\":\"3\",\"array\":\"4\"},{\"test\":\"5\"},[1,2,3],\"OK\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\",\"test\":\"3\",\"array\":\"4\"},\"two\",[\"2\",1,\"1\",true,\"0\",\"3\",\"4\"],{\"test\":\"5\"},[1,2,3],\"OK\"]'\na2 = parse(stringify(a));",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['test']",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "o['test'] = {'test': 'OK'}\no['array'] = [1, 2, 3]\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\",\"3\",\"4\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\",\"test\":\"3\",\"array\":\"4\"},{\"test\":\"5\"},[1,2,3],\"OK\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\",\"test\":\"3\",\"array\":\"4\"},\"two\",[\"2\",1,\"1\",true,\"0\",\"3\",\"4\"],{\"test\":\"5\"},[1,2,3],\"OK\"]'\na2 = parse(stringify(a));\no2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['array']",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "o['array'] = [1, 2, 3]\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\",\"3\",\"4\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\",\"test\":\"3\",\"array\":\"4\"},{\"test\":\"5\"},[1,2,3],\"OK\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\",\"test\":\"3\",\"array\":\"4\"},\"two\",[\"2\",1,\"1\",true,\"0\",\"3\",\"4\"],{\"test\":\"5\"},[1,2,3],\"OK\"]'\na2 = parse(stringify(a));\no2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']\nstr = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "a2",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "a2 = parse(stringify(a));\no2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']\nstr = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')\nassert str['b']['t']['a'] == 'sup' and str['a'][1]['b'][0]['c'] == str['b']['t']\noo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o2",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "o2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']\nstr = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')\nassert str['b']['t']['a'] == 'sup' and str['a'][1]['b'][0]['c'] == str['b']['t']\noo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']\nprint('OK')",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "str",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "str = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')\nassert str['b']['t']['a'] == 'sup' and str['a'][1]['b'][0]['c'] == str['b']['t']\noo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']\nprint('OK')",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "oo",
+        "kind": 5,
+        "importPath": "node_modules.flatted.python.test",
+        "description": "node_modules.flatted.python.test",
+        "peekOfCode": "oo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']\nprint('OK')",
+        "detail": "node_modules.flatted.python.test",
+        "documentation": {}
+    }
+]

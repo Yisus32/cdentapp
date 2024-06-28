@@ -31,6 +31,19 @@ export async function editUser(data, id) {
   return await response.json();
 }
 
+export async function deleteUser (id){
+  const response = await fetch (url +`user/${id}`, {
+    method: 'DELETE',
+    headers:{
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    }
+  });
+    return await response.json();
+}
+
+
+
 export async function createMedicalHistory (data) {
   const response = await fetch(url + 'medicalhistory', {
     method: 'POST',

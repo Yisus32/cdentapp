@@ -130,6 +130,9 @@ with app.app_context():
     db.create_all()
 
 
+
+#Funciones de User
+
 #Crear y Listar un usuario
 
 @app.route('/users', methods=['GET'])
@@ -185,12 +188,15 @@ def update_user(id):
 @app.route('/user/<int:id>', methods=['DELETE'])
 def delete_user(id):
   user = User.query.get(id)
-  if not user:
-    return jsonify({ "message" : "Usuario no encontrado!"}), 404
-
-  db.session.delete(user)
-  db.session.commit()
+  if user:
+        historial_medico = MedicalHistory.query.filter_by(user_id=id).first()
+        if historial_medico:
+            db.session.delete(historial_medico)
+        db.session.delete(user)
+        db.session.commit()
   return jsonify({ "message" : "Usuario Eliminado con Exito!"})
+
+#Funciones de Payment
 
 # Crear y Listar un Pago
 @app.route('/payments', methods=['GET'])
@@ -236,7 +242,7 @@ def update_payment(id):
 
 #Eliminar un Pago
 @app.route('/payment/<int:id>', methods=['DELETE'])
-def delete_payment(id):
+def deletepayment(id):
   payment = Payment.query.get(id)
   if not payment:
     return jsonify({ "message" : "Pago no encontrado!"}), 404
@@ -244,6 +250,9 @@ def delete_payment(id):
   db.session.delete(payment)
   db.session.commit()
   return jsonify({ "message" : "Pago Eliminado con Exito!"})
+
+
+#Funciones de Appointment
 
 
 # Crear y Listar una Cita

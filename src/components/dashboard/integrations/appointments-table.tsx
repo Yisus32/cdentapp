@@ -24,6 +24,8 @@ import {Customer} from "@/components/dashboard/customer/customers-table";
 import FormModal from "@/components/forms/Utils/FormModal";
 import {EditAppoitments} from "@/components/forms/Appoitment/EditAppoitments";
 import ViewAppoitments from "@/components/dashboard/integrations/ViewAppoitments";
+import {deleteAppointment} from '@/services/AppointmentServices';
+
 
 
 function noop(): void {
@@ -78,6 +80,16 @@ export function AppointmentsTable({
     const summonDate = new Date(date);
 
     return summonDate.toLocaleDateString('en-UK', { year: 'numeric', month: 'numeric', day: 'numeric' });
+  }
+
+  const appointmentDelete = (id) =>{
+    deleteAppointment(id).then (response => response.text()).then(data => {
+      console.log(data); // Puedes mostrar la respuesta en la consola o realizar otras acciones
+      window.location.reload();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
   }
 
   return (
@@ -138,7 +150,11 @@ export function AppointmentsTable({
                       </Grid>
 
                       <Grid item xs={4}>
-                        <IconButton>
+                        <IconButton
+                        onClick={()=>{
+                          appointmentDelete(row.id)
+                        }}
+                        >
                           <Trash weight="bold" />
                         </IconButton>
                       </Grid>

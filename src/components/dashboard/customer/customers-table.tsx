@@ -25,6 +25,8 @@ import {EditUser} from "@/components/forms/Users/EditUser";
 import Page from "@/app/dashboard/account/page";
 import ClinicHistory from "@/components/dashboard/customer/ClinicHistory";
 import internal from "stream";
+import { deleteUser } from '@/services/UserServices';
+
 
 function noop(): void {
   // do nothing
@@ -75,6 +77,16 @@ export function CustomersTable({
   }
   const handleClose = () => { setOpen(false); };
   const handleViewClose = () => { setViewOpen(false); };
+
+  
+
+ const userDelete = (id) => {
+    deleteUser(id).then(function(response) {
+      return response.text(); }).then(function(data) {
+      console.log(data); // Puedes mostrar la respuesta en la consola o realizar otras acciones
+ }).catch(function(error) {console.error('Error:', error);
+    });
+  };
 
 
   return (
@@ -145,7 +157,9 @@ export function CustomersTable({
                       </Grid>
 
                       <Grid item xs={4}>
-                        <IconButton>
+                        <IconButton onClick={()=>{
+                          userDelete(row.id)
+                        }}>
                           <Trash weight="bold" />
                         </IconButton>
                       </Grid>

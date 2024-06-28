@@ -23,6 +23,7 @@ import {Customer} from "@/components/dashboard/customer/customers-table";
 import FormModal from "@/components/forms/Utils/FormModal";
 import {EditPayment} from "@/components/forms/Payments/EditPayment";
 import ViewPayments from "@/components/dashboard/settings/ViewPayments";
+import { deletepayment } from '@/services/PaymentServices';
 
 function noop(): void {
   // do nothing
@@ -77,6 +78,16 @@ export function PaymentsTable({
 
   const handleClose = () => { setOpen(false); };
   const handleViewClose = () => { setViewOpen(false); };
+
+  const paymentDelete = (id) => {
+    deletepayment(id).then (response => response.text()).then(data => {
+    console.log(data); // Puedes mostrar la respuesta en la consola o realizar otras acciones
+    window.location.reload();
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
 
 
 
@@ -138,7 +149,11 @@ export function PaymentsTable({
                       </Grid>
 
                       <Grid item xs={4}>
-                        <IconButton>
+                        <IconButton 
+                        onClick={() => {
+                          paymentDelete(row.id)
+                        }}
+                        >
                           <Trash weight="bold" />
                         </IconButton>
                       </Grid>

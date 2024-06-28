@@ -29,3 +29,15 @@ export async function putPayment(data, id) {
 
   return await response.json();
 }
+
+export async function deletepayment(id) {
+  const response = await fetch (url + `payment/${id}`, {
+    method : 'DELETE',
+    headers:{
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
+    return await response.json();
+}
+  
