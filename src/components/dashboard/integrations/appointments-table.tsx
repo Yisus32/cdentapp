@@ -47,6 +47,7 @@ interface AppointmentTableProps {
   page?: number;
   rows?: Appointment[];
   rowsPerPage?: number;
+  userData?: any;
 }
 
 export function AppointmentsTable({
@@ -54,10 +55,12 @@ export function AppointmentsTable({
                                  rows = [],
                                  page = 0,
                                  rowsPerPage = 0,
+                                 userData = []
                                }: AppointmentTableProps): React.JSX.Element {
   const rowIds = React.useMemo(() => {
     return rows.map((appointment) => appointment.id);
   }, [rows]);
+
 
   const { selected } = useSelection(rowIds);
   const [open, setOpen] = React.useState(false);
@@ -83,11 +86,9 @@ export function AppointmentsTable({
   }
 
   const appointmentDelete = (id) =>{
-    deleteAppointment(id).then (response => response.text()).then(data => {
-      console.log(data); // Puedes mostrar la respuesta en la consola o realizar otras acciones
+    deleteAppointment(id).then (response => {
       window.location.reload();
-    })
-    .catch(error => {
+    }).catch(error => {
       console.error('Error:', error);
     });
   }
@@ -110,7 +111,7 @@ export function AppointmentsTable({
           <TableBody>
             {rows.map((row) => {
               const isSelected = selected?.has(row.id);
-
+              console.log(row)
               return (
                 <TableRow hover key={row.id} selected={isSelected}>
                   <TableCell>
@@ -120,16 +121,16 @@ export function AppointmentsTable({
                   </TableCell>
                   <TableCell>
                     <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                      <Typography variant="subtitle2">{row.patient}</Typography>
+                      <Typography variant="subtitle2">{userData.patient.lastname.toUpperCase()} {userData.patient.name.toUpperCase()}</Typography>
                     </Stack>
                   </TableCell>
                   <TableCell>
                     <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                      <Typography variant="subtitle2">{row.medicalProfessional}</Typography>
+                      <Typography variant="subtitle2">{userData.doctor.lastname.toUpperCase()} {userData.doctor.name.toUpperCase()}</Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell>{row.type}</TableCell>
-                  <TableCell>{row.status}</TableCell>
+                  <TableCell>{row.state.toUpperCase()}</TableCell>
+                  <TableCell>{row.status.toUpperCase()}</TableCell>
                   <TableCell>{dayjs(row.createdAt).format('MMM D, YYYY')}</TableCell>
                   <TableCell>
                     <Grid container spacing={1}>

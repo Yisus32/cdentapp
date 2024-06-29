@@ -11,9 +11,9 @@ import {editUser, postUser} from "@/services/UserServices";
 export function EditUser(props): React.JSX.Element {
 
   const [dataToSend, setDataToSend] = React.useState({});
+  const [enableSave, setEnableSave] = React.useState(false);
 
   const saveUser = () => {
-    console.log(dataToSend)
     editUser(dataToSend, props.data.id).then((data) => {
       props.setOpen(false)
       window.location.reload();
@@ -22,7 +22,10 @@ export function EditUser(props): React.JSX.Element {
 
   return (
     <Stack spacing={3} sx={{ maxWidth: 'sm' }}>
-      <FormInputs data={props?.data} setDataToSend={setDataToSend}/>
+      <FormInputs data={props?.data}
+                  setDataToSend={setDataToSend}
+                  setEnableSave={setEnableSave}
+      />
 
       <Divider />
 

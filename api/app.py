@@ -259,7 +259,18 @@ def deletepayment(id):
 @app.route('/appointments', methods=['GET'])
 def get_appointments():
   appointments = Appointments.query.all()
-  response = jsonify({ 'appointments' :[appointment.serialize()  for appointment in appointments]})
+
+  serialized_appointments = [appointment.serialize() for appointment in appointments]
+  for appointment in serialized_appointments:
+      patient = User.query.get(appointment['patient_id'])
+      doctor = User.query.get(appointment['doctor_id'])
+
+  merged_data = {
+    "patient": patient.serialize(),
+    "doctor": doctor.serialize()
+  }
+
+  response = jsonify({ 'appointments' :[appointment.serialize()  for appointment in appointments], 'merged_data': merged_data})
   response.headers.add("Access-Control-Allow-Origin", "*")
 
   return response
@@ -278,9 +289,20 @@ def create_appointment():
 @app.route('/appointment/<int:id>', methods=['GET'])
 def get_appointment(id):
   appointment = Appointments.query.get(id)
+
   if not appointment:
     return jsonify({ "message" : "Cita no encontrada!"}), 404
-  return jsonify(appointment.serialize())
+
+  patient = User.query.get(appointment.patient_id)
+  doctor = User.query.get(appointment.doctor_id)
+
+  merged_appointment = {
+    "appointment": appointment.serialize(),
+    "patient": patient.serialize(),
+    "doctor": doctor.serialize()
+  }
+
+  return jsonify(merged_appointment)
 
 #Editar una Cita
 @app.route('/appointment/<int:id>', methods=['PUT'])
@@ -356,7 +378,7 @@ def getUsersByMedicalRol(id):
   users = User.query.filter(User.rol_id == id).all()
   if not users:
     return jsonify({"message": "No existe rol"}, 404)  # Devuelve el rol del usuario como respuesta en formato JSON
-  
+
   serialized_users = [user.serialize() for user in users]
   response = jsonify(serialized_users)
   response.headers.add("Access-Control-Allow-Origin", "*")
@@ -368,7 +390,7 @@ def getUsersByPatientRol(rol_id):
   users = User.query.filter(User.rol_id == rol_id).all()
   if not users:
     return jsonify({"message": "No existe rol"}, 404)  # Devuelve el rol del usuario como respuesta en formato JSON
-  
+
   serialized_users = [user.serialize() for user in users]
   response = jsonify(serialized_users)
   response.headers.add("Access-Control-Allow-Origin", "*")

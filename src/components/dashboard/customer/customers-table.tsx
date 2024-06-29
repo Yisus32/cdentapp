@@ -78,12 +78,11 @@ export function CustomersTable({
   const handleClose = () => { setOpen(false); };
   const handleViewClose = () => { setViewOpen(false); };
 
-  
+
 
  const userDelete = (id) => {
     deleteUser(id).then(function(response) {
       return response.text(); }).then(function(data) {
-      console.log(data); // Puedes mostrar la respuesta en la consola o realizar otras acciones
  }).catch(function(error) {console.error('Error:', error);
     });
   };

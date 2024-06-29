@@ -16,7 +16,6 @@ const Item = styled(Paper)(({ theme }: { theme: Theme }) => ({
 }));
 
 const MedicalHistoryGrid = (props) => {
-  console.log(props.dataToSend)  
   return (
     <Box
       sx={{ bgcolor: '#fff', height: '30vh'}}
@@ -47,7 +46,7 @@ const MedicalHistoryGrid = (props) => {
                 <Item> Tipo de Cirugia : {props.dataToSend.description_sugery === "" ? 'Ninguna' : props.dataToSend.description_sugery} </Item>
                 <Item> Alergias : {props.dataToSend?.allergies}</Item>
                 <Item> Tipo de Alergias : {props.dataToSend?.description_allergies === "" ? 'Ninguna': props.dataToSend?.description_allergies }</Item>
-                
+
 
             </Stack>
           </Grid>

@@ -12,7 +12,6 @@ export function EditAppoitments(props): React.JSX.Element {
   const [dataToSend, setDataToSend] = React.useState(props.data);
 
   const saveAppointment= () => {
-    console.log(dataToSend, props.data.id);
     putAppointment(dataToSend, props.data.id).then((data) => {
       props.setOpen(false)
       window.location.reload();

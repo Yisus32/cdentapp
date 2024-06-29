@@ -9,11 +9,17 @@ import {useEffect} from "react";
 import { getUsersByMedicalRol } from '@/services/AppointmentServices';
 import {getUsersByPatientRol} from '@/services/AppointmentServices'
 
-const states = [
+const types = [
   { value: 'Consulta', label: 'Consulta' },
   { value: 'Cirugia', label: 'Cirugia' },
   { value: 'Ortodoncia', label: 'Ortodoncia' },
   { value: 'Paronamica', label: 'Paronamica' },
+] as const;
+
+const states = [
+  { value: 'Pendiente', label: 'Pendiente' },
+  { value: 'Realizada', label: 'Realizada' },
+  { value: 'Cancelada', label: 'Cancelada' },
 ] as const;
 
 export function FormInputs(props): React.JSX.Element {
@@ -52,21 +58,15 @@ export function FormInputs(props): React.JSX.Element {
 
   useEffect(() => {
     getUsersByMedicalRol(3).then(response => {
-      console.log(response)
       setMedicList(response)
     })
   }, [])
-
-  console.log(medicList)
-
 
   useEffect(() => {
     getUsersByPatientRol(2).then(response => {
       setPatientList(response)
     })
   }, [])
-
-  console.log(patientList)
 
   return (
     <>
@@ -79,42 +79,49 @@ export function FormInputs(props): React.JSX.Element {
 
       <FormControl fullWidth>
         <InputLabel>Fecha</InputLabel>
-        <OutlinedInput label="date" name="date" type="date" value={date} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          formatAndSetDate(event.target.value);
-        }}/>
+        <OutlinedInput name="date"
+                       type="date"
+                       value={date}
+                       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                          formatAndSetDate(event.target.value);
+                       }}
+        />
       </FormControl>
 
       <FormControl fullWidth>
         <InputLabel>Paciente</InputLabel>
-        <Select defaultValue="patient" label="patient" name="patient" variant="outlined" value={patientList} onChange={
-          (event: React.ChangeEvent<{ value: unknown }>) => {
-            setPatientList(event.target.value);
-          }
-        }>
-          {patientList.map((patient) => (
-            <MenuItem key={patient.id} value={patient.id}>
-              {patient.name} {patient.lastname}
-            </MenuItem>
-          ))}
-        </Select>
+          <Select variant="outlined"
+                  value={patient}
+                  onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+                    setPatient(event.target.value);
+                  }}
+          >
+            {patientList?.map((patient) => (
+                <MenuItem key={patient.dni} value={patient.id}>
+                  {patient.lastname.toUpperCase()} {patient.name.toUpperCase()}
+                </MenuItem>
+            ))}
+          </Select>
       </FormControl>
 
 
       <FormControl fullWidth>
         <InputLabel>Medico</InputLabel>
-        <Select defaultValue="medical" label="medical" name="medical" variant="outlined" value={medicList} onChange={
-          (event: React.ChangeEvent<{ value: unknown }>) => {
-            setMedicList(event.target.value);
+        <Select variant="outlined"
+                value={medicalProfessional}
+                onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+                  setMedicalProfessional(event.target.value);
+                }}
+        >
+          {
+            medicList?.map((medic) => (
+              <MenuItem key={medic.dni} value={medic.id}>
+                {medic.lastname.toUpperCase()} {medic.name.toUpperCase()}
+              </MenuItem>
+          ))
           }
-        }>
-          {medicList.map((medic) => (
-            <MenuItem key={medic.id} value={medic.id}>
-              {medic.name} {medic.lastname}
-            </MenuItem>
-          ))}
         </Select>
       </FormControl>
-
 
       <FormControl fullWidth>
         <InputLabel>Tipo</InputLabel>
@@ -123,7 +130,7 @@ export function FormInputs(props): React.JSX.Element {
             setState(event.target.value);
           }
         }>
-          {states.map((option) => (
+          {types.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>
@@ -133,9 +140,20 @@ export function FormInputs(props): React.JSX.Element {
 
       <FormControl fullWidth>
         <InputLabel>Status</InputLabel>
-        <OutlinedInput label="Status" name="status" type="text" value={status} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setStatus(event.target.value);
-        }} />
+        <Select defaultValue="Estado"
+                label="State"
+                name="state"
+                variant="outlined"
+                value={state}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setStatus(event.target.value);
+                }}>
+          {states.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
       </FormControl>
 
 

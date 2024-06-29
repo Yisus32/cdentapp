@@ -81,7 +81,6 @@ export function PaymentsTable({
 
   const paymentDelete = (id) => {
     deletepayment(id).then (response => response.text()).then(data => {
-    console.log(data); // Puedes mostrar la respuesta en la consola o realizar otras acciones
     window.location.reload();
   })
   .catch(error => {
@@ -149,7 +148,7 @@ export function PaymentsTable({
                       </Grid>
 
                       <Grid item xs={4}>
-                        <IconButton 
+                        <IconButton
                         onClick={() => {
                           paymentDelete(row.id)
                         }}

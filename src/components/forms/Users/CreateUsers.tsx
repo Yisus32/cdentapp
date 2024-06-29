@@ -9,6 +9,7 @@ import {deleteCustomer, postUser} from "@/services/UserServices";
 
 export function CreateUser(props): React.JSX.Element {
   const [dataToSend, setDataToSend] = React.useState({});
+  const [enableSave, setEnableSave] = React.useState(false);
 
   const saveUser = () => {
     postUser(dataToSend).then((data) => {
@@ -24,13 +25,16 @@ export function CreateUser(props): React.JSX.Element {
 
   return (
       <Stack spacing={3} sx={{maxWidth: 'sm' }}>
-        <FormInputs setDataToSend={setDataToSend} />
+        <FormInputs setDataToSend={setDataToSend} setEnableSave={setEnableSave}/>
 
         <Divider />
 
-        <Button variant="contained" onClick={() => {
-          saveUser();
-        }}>Agregar</Button>
+        <Button variant="contained"
+                onClick={() => {
+                  saveUser();
+                }}
+                disabled={! enableSave}
+        >Agregar</Button>
       </Stack>
   );
 }

@@ -11,7 +11,6 @@ export function EditPayment(props): React.JSX.Element {
   const [dataToSend, setDataToSend] = React.useState(props.data);
 
   const savePayment = () => {
-    console.log(dataToSend, props.data.id);
     putPayment(dataToSend, props.data.id).then((data) => {
       props.setOpen(false)
       window.location.reload();

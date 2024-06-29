@@ -35,7 +35,6 @@ export default function Page(): React.JSX.Element {
     });
   }, []);
 
-  console.log(payments);
   const paginatedPayments = applyPagination(payments, page, rowsPerPage);
 
   return (

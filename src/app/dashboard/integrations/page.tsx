@@ -25,16 +25,19 @@ export default function Page(): React.JSX.Element {
   const [open, setOpen] = React.useState(false);
 
    const [appointments, setAppointments] = React.useState<Appointment[]>([]);
+   const [userData, setUserData] = React.useState<Appointment[]>([]);
   const handleOpen = () => { setOpen(true); };
   const handleClose = () => { setOpen(false); };
 
   useEffect (() => {
     getAppointments().then((data) => {
       setAppointments(data['appointments']);
+      setUserData(data['merged_data'])
     });
   }, []);
 
  const paginatedAppointment = applyPagination(appointments, page, rowsPerPage);
+
 
   return (
     <Stack spacing={3}>
@@ -59,6 +62,7 @@ export default function Page(): React.JSX.Element {
 
       <AppointmentsTable
         count={paginatedAppointment.length}
+        userData={userData}
         page={page}
         rows={paginatedAppointment}
         rowsPerPage={rowsPerPage}
